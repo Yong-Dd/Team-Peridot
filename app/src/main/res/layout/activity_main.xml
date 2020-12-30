@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/main_page_background" />
+
+    <RelativeLayout
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/logo_base_color" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp">
+
+        <Button
+            android:id="@+id/close_button"
+            android:layout_width="70dp"
+            android:layout_height="20dp"
+            android:background="@drawable/main_page_rect_login"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="로그인"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:backgroundTint="#00FFB8B8"
+            app:backgroundTintMode="add"
+            app:strokeColor="#FFFFFF" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="72dp"
+        android:layout_marginLeft="72dp"
+        android:layout_marginTop="420dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginRight="110dp"
+        android:background="@drawable/main_page_rect_button1">
+
+        <ImageView
+            android:id="@+id/order"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/coffee_icon" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="420dp"
+        android:layout_marginEnd="72dp"
+        android:layout_marginRight="72dp"
+        android:background="@drawable/main_page_rect_button2">
+
+        <ImageView
+            android:id="@+id/payment"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/creditcard_payment" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/insta_icon_rect"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/main_page_rect_button"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/insta"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:srcCompat="@drawable/instagram_icon" />
+    </RelativeLayout>
+</RelativeLayout>
