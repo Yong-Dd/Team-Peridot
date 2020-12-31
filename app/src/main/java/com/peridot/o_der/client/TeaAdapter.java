@@ -3,6 +3,10 @@ package com.peridot.o_der.client;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,20 +15,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.ViewHolder> {
-    ArrayList<com.peridot.o_der.client.Tea> items = new ArrayList<com.peridot.o_der.client.Tea>();
+    ArrayList<Tea> items = new ArrayList<Tea>();
 
     @NonNull
     @Override
-    public com.peridot.o_der.client.TeaAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.tea_item, viewGroup, false);
 
-        return new com.peridot.o_der.client.TeaAdapter.ViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull com.peridot.o_der.client.TeaAdapter.ViewHolder viewHolder, int position) {
-        com.peridot.o_der.client.Tea item = items.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        Tea item = items.get(position);
         viewHolder.setItem(item);
     }
 
@@ -42,26 +46,39 @@ public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.ViewHolder> {
 
             teaname = itemView.findViewById(R.id.teaname);
             teaprice = itemView.findViewById(R.id.teaprice);
+            ImageButton menuplusbutton = itemView.findViewById(R.id.menuplusbutton);
+
+            Button orderbutton = ((MenuPage)MenuPage.context_menu).findViewById(R.id.orderbutton);
+            Animation translateUpAnim = ((MenuPage)MenuPage.context_menu).translateUpAnim;
+            LinearLayout fragmentPage = ((MenuPage)MenuPage.context_menu).findViewById(R.id.fragmentPage);
+            menuplusbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    orderbutton.setVisibility(View.GONE);
+                    fragmentPage.setVisibility(View.VISIBLE);
+                    fragmentPage.startAnimation(translateUpAnim);
+                }
+            });
         }
 
-        public void setItem(com.peridot.o_der.client.Tea item) {
+        public void setItem(Tea item) {
             teaname.setText(item.getName());
             teaprice.setText(item.getPrice());
         }
     }
-    public void addItem(com.peridot.o_der.client.Tea item) {
+    public void addItem(Tea item) {
         items.add(item);
     }
 
-    public void setItems(ArrayList<com.peridot.o_der.client.Tea> items) {
+    public void setItems(ArrayList<Tea> items) {
         this.items = items;
     }
 
-    public com.peridot.o_der.client.Tea getItem(int position) {
+    public Tea getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position, com.peridot.o_der.client.Tea item) {
+    public void setItem(int position, Tea item) {
         items.set(position, item);
     }
 }

@@ -28,7 +28,7 @@
         android:layout_marginRight="10dp">
 
         <Button
-            android:id="@+id/close_button"
+            android:id="@+id/main_logInButton"
             android:layout_width="70dp"
             android:layout_height="20dp"
             android:background="@drawable/main_page_rect_login"
@@ -44,9 +44,10 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/orderLayout"
         android:layout_width="120dp"
-        android:layout_height="120dp"
 
+        android:layout_height="120dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -67,6 +68,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/paymentLayout"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_alignParentTop="true"

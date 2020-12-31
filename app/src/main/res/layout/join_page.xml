@@ -17,15 +17,17 @@
             android:orientation="vertical"
             android:background="#ffffff">
 
-            <ImageView
-                android:id="@+id/imageView3"
+            <Button
+                android:id="@+id/close_btn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="right"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:src="@drawable/xbutton_black" />
+                android:background="@drawable/xbutton_black"
+                app:backgroundTint="#00ffffff"
+                app:backgroundTintMode="src_over" />
 
             <TextView
                 android:layout_width="match_parent"

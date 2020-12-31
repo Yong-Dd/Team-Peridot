@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,14 +17,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
 
         imageView = findViewById(R.id.imageView2);
         Drawable alpha1 = imageView.getBackground();
         alpha1.setAlpha(100);
 
         //로그인 버튼 - 로그인 화면으로 이동
-        Button login_button = findViewById(R.id.close_button);
+        Button login_button = findViewById(R.id.main_logInButton);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //결제 버튼 - 결제 화면으로 이동
-        Button paymentButton = findViewById(R.id.payment);
-        paymentButton.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout paymentLayout = findViewById(R.id.paymentLayout);
+        paymentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PaymentPage.class);
@@ -49,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //주문 버튼 - 주문 화면으로 이동
-        Button orderButton = findViewById(R.id.order);
-        orderButton.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout order = findViewById(R.id.orderLayout);
+        order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MenuPage.class);

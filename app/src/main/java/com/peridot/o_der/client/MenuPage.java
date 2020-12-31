@@ -1,32 +1,43 @@
 package com.peridot.o_der.client;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+
 public class MenuPage extends AppCompatActivity {
 
+    public static Context context_menu; //다른 액티비티에게 변수를 줄 수 있음
     Animation translateUpAnim; //orderbutton 올라오는 애니메이션, Fragment
     Animation translateDownAnim; //orderbutton 내려가는 애니메이션, Fragment
+    MenuFragment menuFragment;
+    static int count ;
+    Button orderbutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_page);
 
+        context_menu = this; //다른 액티비티에서 MenuPage 변수를 사용할 수 있음
+
         RecyclerView coffeerecyclerView = findViewById(R.id.coffeerecyclerView);//커피리사이클러뷰
         RecyclerView disertrecyclerView = findViewById(R.id.disertrecyclerView);//디저트리사이클러뷰
         RecyclerView tearecyclerView = findViewById(R.id.tearecyclerView);//티리사이클러뷰
+
+        menuFragment = (MenuFragment) getSupportFragmentManager().findFragmentById(R.id.menufragment);
 
         translateUpAnim = AnimationUtils.loadAnimation(this, R.anim.translate_up); //애니메이션 불러오기
         translateDownAnim = AnimationUtils.loadAnimation(this, R.anim.translate_down); //애니메이션 불러오기
@@ -34,6 +45,8 @@ public class MenuPage extends AppCompatActivity {
         SlidingButtonAnimationListener animationListener = new SlidingButtonAnimationListener(); //애니메이션 리스너 생성자
         translateDownAnim.setAnimationListener(animationListener);// 애니메이션에 리스너 연결
         translateUpAnim.setAnimationListener(animationListener);// 애니메이션에 리스너 연결
+
+        LinearLayout fragmentpage = findViewById(R.id.fragmentPage);
 
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);// 리니어레이아웃매니저 생성
@@ -56,7 +69,7 @@ public class MenuPage extends AppCompatActivity {
         }); //onInterceptTouchEvent는 기본적으로 누르고 때고를 인식하여 2번 눌리는 효과가 생김, 그래서 onSingleTapUp을 넣어 1번 인식하는걸로 바꿈
 
 
-        coffeerecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        /*coffeerecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
                 View child = coffeerecyclerView.findChildViewUnder(e.getX(), e.getY());//클릭시 X,Y좌표 구하기
@@ -81,7 +94,7 @@ public class MenuPage extends AppCompatActivity {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
-        }); //커피리사이클러뷰 클릭시 발생하는 이벤트 처리
+        }); //커피리사이클러뷰 클릭시 발생하는 이벤트 처리*/
 
         LinearLayoutManager layoutManager1 =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -93,7 +106,7 @@ public class MenuPage extends AppCompatActivity {
         disertAdapter.addItem(new Disert("슈크림", "6000원"));
 
         disertrecyclerView.setAdapter(disertAdapter);
-        disertrecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        /*disertrecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
                 View child = coffeerecyclerView.findChildViewUnder(e.getX(), e.getY());
@@ -118,7 +131,7 @@ public class MenuPage extends AppCompatActivity {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
-        });
+        });*/
 
         LinearLayoutManager layoutManager2 =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -131,7 +144,7 @@ public class MenuPage extends AppCompatActivity {
 
 
         tearecyclerView.setAdapter(teaAdapter);
-        tearecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        /*tearecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
                 View child = coffeerecyclerView.findChildViewUnder(e.getX(), e.getY());
@@ -156,16 +169,26 @@ public class MenuPage extends AppCompatActivity {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
-        });
+        });*/
 
-        Button orderbutton = findViewById(R.id.orderbutton);
+        orderbutton = findViewById(R.id.orderbutton);
         orderbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                orderbutton.startAnimation(translateDownAnim);//버튼에 down 애니메이션 적용
-                orderbutton.setVisibility(v.GONE);//버튼 안보임
+               Intent intent = new Intent(getApplicationContext(),PaymentPage.class);
+               startActivity(intent);
             }
         });//누르면 결재페이지로 넘어가기
+
+        Button close_btn = findViewById(R.id.close_btn);
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(R.anim.login_page_slide_in_left,R.anim.login_page_slide_out_right);
+            }
+        });
+
     }
     private class SlidingButtonAnimationListener implements Animation.AnimationListener {
 
@@ -184,4 +207,5 @@ public class MenuPage extends AppCompatActivity {
 
         }
     } //애니메이션리스너 implements Animationi.AnimationListener가 핵심
+
 }

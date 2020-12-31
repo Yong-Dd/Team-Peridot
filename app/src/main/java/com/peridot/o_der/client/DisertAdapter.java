@@ -1,8 +1,13 @@
 package com.peridot.o_der.client;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +47,20 @@ static class ViewHolder extends RecyclerView.ViewHolder{
 
         disertname = itemView.findViewById(R.id.disertname);
         disertprice = itemView.findViewById(R.id.disertprice);
+        ImageButton menuplusbutton = itemView.findViewById(R.id.menuplusbutton);
+
+        Button orderbutton = ((MenuPage)MenuPage.context_menu).findViewById(R.id.orderbutton);
+        Animation translateUpAnim = ((MenuPage)MenuPage.context_menu).translateUpAnim;
+        LinearLayout fragmentPage = ((MenuPage)MenuPage.context_menu).findViewById(R.id.fragmentPage);
+
+        menuplusbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                orderbutton.setVisibility(View.GONE);
+                fragmentPage.setVisibility(View.VISIBLE);
+                fragmentPage.startAnimation(translateUpAnim);
+            }
+        });
     }
 
     public void setItem(Disert item) {

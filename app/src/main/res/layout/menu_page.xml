@@ -62,7 +62,7 @@
                     android:layout_weight="1">
 
                     <Button
-                        android:id="@+id/button2"
+                        android:id="@+id/close_btn"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_alignParentEnd="true"
@@ -157,9 +157,26 @@
         android:layout_marginTop="600dp"
         android:background="@drawable/menu_page_order_button2"
         android:elevation="10dp"
+        android:text="1개"
+        android:textSize="30sp"
+        android:textStyle="bold"
         android:visibility="gone"
         app:backgroundTint="#00FFFFFF"
         app:backgroundTintMode="src_over"
         app:elevation="20dp" />
+
+    <LinearLayout
+        android:id="@+id/fragmentPage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <fragment
+            android:id="@+id/menufragment"
+            android:name="com.peridot.o_der.client.MenuFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 </FrameLayout>
