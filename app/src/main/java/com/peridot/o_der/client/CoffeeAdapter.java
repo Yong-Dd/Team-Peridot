@@ -1,5 +1,6 @@
 package com.peridot.o_der.client;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,10 +40,12 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
         return items.size();
     }
 
+    //****OnClickListener 추가
      public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView coffeename;
         TextView coffeeprice;
+//        public ImageButton menuplusbutton = itemView.findViewById(R.id.menuplusbutton);
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -61,6 +64,7 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
                     orderbutton.setVisibility(View.GONE);
                     fragmentPage.setVisibility(View.VISIBLE);
                     fragmentPage.startAnimation(translateUpAnim);
+
                 }
             });
 
@@ -72,7 +76,7 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
             coffeeprice.setText(item.getPrice());
         }
 
-    }//View에 내용 추가
+     }//View에 내용 추가
 
     public void addItem(Coffee item) {
         items.add(item);

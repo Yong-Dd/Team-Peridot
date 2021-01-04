@@ -60,7 +60,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
 
         public void setItem(Payment item){
             payment_coffeeName.setText(item.getCoffeeName());
-            payment_coffeePrice.setText(item.getCoffeePrice());
+            payment_coffeePrice.setText(item.getCoffeePrice()+"원");
         }
     }
 }

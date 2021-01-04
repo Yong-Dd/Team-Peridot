@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +32,7 @@ public class MenuFragment extends Fragment {
     static int ordercount ;
     Button orderbutton;
 
-    static int count2;
-
-    MenuPage menuPage = new MenuPage();
+    int count2;
 
     @Nullable
     @Override
@@ -90,10 +89,6 @@ public class MenuFragment extends Fragment {
                 count++;
                 coffee_quan.setText(String.valueOf(count));
 
-
-
-//                count2 =  count2 + 3000;
-//                Add_btn_text.setText(String.valueOf(count2));
                 count2 += 3000;
                 String text = String.valueOf(count2)+"원 담기";
                 Add_btn_text.setText(text);
@@ -118,6 +113,10 @@ public class MenuFragment extends Fragment {
 
                 ordercount+=1;
                 orderbutton.setText(Integer.toString(ordercount)+"개");
+
+
+                //******총 가격을 (count2)를 MenuPage의 checkItem으로 넘김
+                ((MenuPage)MenuPage.context_menu).checkItem(count2);
             }
         });
         return rootView;

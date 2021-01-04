@@ -3,6 +3,8 @@ package com.peridot.o_der.client;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,11 +13,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class MenuPage extends AppCompatActivity {
 
@@ -25,11 +29,27 @@ public class MenuPage extends AppCompatActivity {
     MenuFragment menuFragment;
     static int count ;
     Button orderbutton;
+    Button menuPlusButton;
+
+    //****변수 추가
+    static int coffee_position;
+    static int dessert_position;
+    static int tea_position;
+    static ArrayList<Payment> paymentList;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_page);
+
+        /*추가*/
+        paymentList= new ArrayList<>();
+        coffee_position = -1;
+        dessert_position = -1;
+        tea_position = -1;
+        //****여기까지
 
         context_menu = this; //다른 액티비티에서 MenuPage 변수를 사용할 수 있음
 
@@ -68,21 +88,21 @@ public class MenuPage extends AppCompatActivity {
             }
         }); //onInterceptTouchEvent는 기본적으로 누르고 때고를 인식하여 2번 눌리는 효과가 생김, 그래서 onSingleTapUp을 넣어 1번 인식하는걸로 바꿈
 
-
-        /*coffeerecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        /******추가 버튼 클릭시 position 전달*/
+        coffee_position = 0;
+        coffeerecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
                 View child = coffeerecyclerView.findChildViewUnder(e.getX(), e.getY());//클릭시 X,Y좌표 구하기
                 int position = coffeerecyclerView.getChildAdapterPosition(child);//해당 좌표가 몇번째 리사이클러뷰인지
 
-                Button orderbuttom = findViewById(R.id.orderbutton);
                 if(child!=null&&gestureDetector.onTouchEvent(e)){
-                orderbuttom.setVisibility(View.VISIBLE);//버튼 보이기, defualt : gone
-                Log.d("position", "{" + position + "]");
+                 coffee_position = position;
                 }
 
-                orderbuttom.startAnimation(translateUpAnim);//버튼에 up 애니메이션 적용
                 return false;
+
+
             } //클릭시 발생하는 곳
 
             @Override
@@ -94,7 +114,7 @@ public class MenuPage extends AppCompatActivity {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
-        }); //커피리사이클러뷰 클릭시 발생하는 이벤트 처리*/
+        }); //커피리사이클러뷰 클릭시 발생하는 이벤트 처리
 
         LinearLayoutManager layoutManager1 =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -106,19 +126,16 @@ public class MenuPage extends AppCompatActivity {
         disertAdapter.addItem(new Disert("슈크림", "6000원"));
 
         disertrecyclerView.setAdapter(disertAdapter);
-        /*disertrecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        disertrecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
                 View child = coffeerecyclerView.findChildViewUnder(e.getX(), e.getY());
                 int position = coffeerecyclerView.getChildAdapterPosition(child);
 
-                Button orderbuttom = findViewById(R.id.orderbutton);
-
                 if(child!=null&&gestureDetector.onTouchEvent(e)){
-                orderbuttom.setVisibility(View.VISIBLE);
-                Log.d("position", "{" + position + "]");}
+                    dessert_position = position;
+                }
 
-                orderbuttom.startAnimation(translateUpAnim);
                 return false;
             }
 
@@ -131,7 +148,7 @@ public class MenuPage extends AppCompatActivity {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
-        });*/
+        });
 
         LinearLayoutManager layoutManager2 =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -144,19 +161,17 @@ public class MenuPage extends AppCompatActivity {
 
 
         tearecyclerView.setAdapter(teaAdapter);
-        /*tearecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+        tearecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
                 View child = coffeerecyclerView.findChildViewUnder(e.getX(), e.getY());
                 int position = coffeerecyclerView.getChildAdapterPosition(child);
 
-                Button orderbuttom = findViewById(R.id.orderbutton);
 
                 if(child!=null&&gestureDetector.onTouchEvent(e)){
-                orderbuttom.setVisibility(View.VISIBLE);
-                Log.d("position", "{" + position + "]");}
+                    tea_position = position;
+                }
 
-                orderbuttom.startAnimation(translateUpAnim);
                 return false;
             }
 
@@ -169,14 +184,19 @@ public class MenuPage extends AppCompatActivity {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
-        });*/
+        });
 
         orderbutton = findViewById(R.id.orderbutton);
         orderbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                Intent intent = new Intent(getApplicationContext(),PaymentPage.class);
+               intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+               Log.d("paymentList",Integer.toString(paymentList.size()));
+               intent.putParcelableArrayListExtra("paymentList", (ArrayList<? extends Parcelable>) paymentList);
                startActivity(intent);
+
+
             }
         });//누르면 결재페이지로 넘어가기
 
@@ -207,5 +227,37 @@ public class MenuPage extends AppCompatActivity {
 
         }
     } //애니메이션리스너 implements Animationi.AnimationListener가 핵심
+
+   /**** MenuFragment에서 받은 가격과 recycler의 addOnItemTouchListener에서 받은 위치를
+    arraylist(paymentList)에 저장, MenuFragment에서 추가 하는 순서대로 paymentList에 추가됨
+    MenuFragment에서 넘어온 거라서 그 당시의 position으로 선택을 알 수 있음*/
+    public void checkItem(int price){
+        Log.d("paymentList","MenuPage, checkItem called"+price);
+        String itemName = "";
+
+        //여러 메뉴 선택시, 메뉴 중복을 피하기 위해 각 position을 -1로 변경
+         switch (coffee_position){
+            case 0: itemName = "아메리카노"; coffee_position = -1; break;
+            case 1: itemName = "카푸치노"; coffee_position = -1; break;
+            case 2: itemName = "카라멜 마끼야또"; coffee_position = -1; break;
+            default: break;
+        }
+        switch (dessert_position){
+            case 0: itemName = "치즈케이크"; dessert_position = -1; break;
+            case 1: itemName = "초코케이크"; dessert_position = -1; break;
+            case 2: itemName = "슈크림"; dessert_position = -1; break;
+            default: break;
+        }
+        switch (tea_position){
+            case 0: itemName = "얼그레이티"; tea_position = -1; break;
+            case 1: itemName = "아이스티"; tea_position = -1; break;
+            case 2: itemName = "레몬 녹차";tea_position = -1; break;
+        }
+
+        if(!itemName.equals("")){
+            Log.d("paymentList","checkItem add, itemName: "+itemName);
+            paymentList.add(new Payment(itemName, price));
+        }
+    }
 
 }

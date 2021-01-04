@@ -32,14 +32,15 @@
                     android:layout_toLeftOf="@+id/close_button"
                     android:fontFamily="sans-serif-thin"
                     android:gravity="center"
+                    android:paddingLeft="25dp"
                     android:text="주문"
                     android:textColor="#695653"
                     android:textSize="30sp" />
 
                 <Button
                     android:id="@+id/close_button"
-                    android:layout_width="25sp"
-                    android:layout_height="25sp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
@@ -104,21 +105,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
+                <Spinner
+                    android:id="@+id/payment_coupon_spinner"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="할인 쿠폰"
-                    android:textColor="#695653"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:paddingBottom="5dp" />
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:background="#B5A395">
 
                 <TextView
@@ -177,7 +174,7 @@
                 <EditText
                     android:id="@+id/memo_editText"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="200dp"
                     android:background="#E4E4E4"
                     android:ems="10"
                     android:gravity="top"
@@ -199,12 +196,14 @@
                 android:layout_marginTop="30dp">
 
                 <Button
-                    android:id="@+id/button3"
-                    android:layout_width="150dp"
+                    android:id="@+id/payment_button"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/fragment_pay_button"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:text="결제하기"
                     android:textSize="18sp"
                     app:backgroundTint="#00000000"
