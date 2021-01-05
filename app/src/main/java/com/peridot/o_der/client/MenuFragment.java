@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +31,13 @@ public class MenuFragment extends Fragment {
 
     Animation translateDownAnim;
     static int ordercount ;
+    RadioButton HotBtn;
+    RadioButton IceBtn;
     Button orderbutton;
 
-    int count2;
+    static int count2;
+
+    MenuPage menuPage = new MenuPage();
 
     @Nullable
     @Override
@@ -42,6 +47,8 @@ public class MenuFragment extends Fragment {
         ordercount = 0;
         coffee_quan = rootView.findViewById(R.id.coffee_quan);
         Add_btn_text = rootView.findViewById(R.id.Add_btn);
+        HotBtn = rootView.findViewById(R.id.Hot_btn);
+        IceBtn = rootView.findViewById(R.id.Ice_btn);
         count2 = Integer.parseInt(Add_btn_text.getText().toString());
 
         ImageButton closeBtn = rootView.findViewById(R.id.close_btn);         // 닫기 버튼
@@ -64,19 +71,22 @@ public class MenuFragment extends Fragment {
                 count--;
                 coffee_quan.setText(String.valueOf(count));
 
-//                count2 = Integer.parseInt(Add_btn_text.getText().toString());
-//                count2 =  count2 - 3000;
-//                Add_btn_text.setText(String.valueOf(count2));
                 count2 -= 3000;
                 String text = String.valueOf(count2)+"원 담기";
+                String texts = "0원 담기";
                 Add_btn_text.setText(text);
 
-                if(count <= 0){                                       // 개수가 0 이하일 때
+                if(count < 1){                                                // 개수가 1 미만일 때
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("경고");
                     builder.setMessage("잘못된 개수입니다.");
                     builder.setNegativeButton("돌아가기", null);
                     builder.create().show();
+
+                    count = 0;
+                    coffee_quan.setText(String.valueOf(count));
+                    count2 = 0;
+                    Add_btn_text.setText(texts);
                 }
             }
         });
@@ -105,14 +115,24 @@ public class MenuFragment extends Fragment {
                 LinearLayout fragmentpage = ((MenuPage) MenuPage.context_menu).findViewById(R.id.fragmentPage);
                 orderbutton = ((MenuPage)MenuPage.context_menu).findViewById(R.id.orderbutton);
 
-                fragmentpage.startAnimation(translateDownAnim);
-                fragmentpage.setVisibility(View.GONE);
+                // 핫/아이스 버튼 선택하지 않았을 경우
+                if(HotBtn.isChecked() == false && IceBtn.isChecked() == false) {
+                    Toast.makeText(getContext(), "핫/아이스 를 선택하세요", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    if(count2 > 0) {
+                        fragmentpage.startAnimation(translateDownAnim);
+                        fragmentpage.setVisibility(View.GONE);
+                        orderbutton.setVisibility(View.VISIBLE);
+                        orderbutton.startAnimation(translateUpAnim);
 
-                orderbutton.setVisibility(View.VISIBLE);
-                orderbutton.startAnimation(translateUpAnim);
-
-                ordercount+=1;
-                orderbutton.setText(Integer.toString(ordercount)+"개");
+                        ordercount+=1;
+                        orderbutton.setText(Integer.toString(ordercount)+"개");
+                    }
+                    else{
+                        Toast.makeText(getContext(), "잘못된 개수입니다", Toast.LENGTH_LONG).show();
+                    }
+                }
 
 
                 //******총 가격을 (count2)를 MenuPage의 checkItem으로 넘김

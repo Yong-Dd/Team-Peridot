@@ -79,27 +79,35 @@
             android:layout_marginBottom="160dp"
             android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/Hot_btn"
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="70dp"
-                android:text="핫"
-                android:textColor="#695653"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:buttonTint="#af1212" />
+                android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/Ice_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="110dp"
-                android:text="아이스"
-                android:textColor="#695653"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:buttonTint="#af1212" />
+                <RadioButton
+                    android:id="@+id/Hot_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="70dp"
+                    android:text="핫"
+                    android:textColor="#695653"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:buttonTint="#af1212" />
+
+                <RadioButton
+                    android:id="@+id/Ice_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginLeft="100dp"
+                    android:text="아이스"
+                    android:textColor="#695653"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:buttonTint="#af1212" />
+            </RadioGroup>
+
         </LinearLayout>
 
         <LinearLayout

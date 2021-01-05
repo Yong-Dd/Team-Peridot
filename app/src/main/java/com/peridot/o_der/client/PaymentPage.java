@@ -1,5 +1,6 @@
 package com.peridot.o_der.client;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,9 +24,11 @@ public class PaymentPage extends AppCompatActivity {
 
     //coupon 종류
     String[] coupons = {"선택 안함", "첫 가입 축하 쿠폰 - 20%","생일 기념 쿠폰 - 10%", "오늘의 메뉴 할인 - 5%"};
+    // 픽업 시간 Text
+    TextView time_pick_Text;
 
     //결제할 총 금액
-    static int choice_price;
+    static int choice_price = 0;
 
     PaymentAdapter adapter;
     RecyclerView recyclerView;
@@ -46,7 +50,8 @@ public class PaymentPage extends AppCompatActivity {
         //주문리스트 가져올 리스트
         paymentList = new ArrayList<>();
 
-
+        //time picker
+        time_pick_Text = findViewById(R.id.time_picker);
 
         //MenuPage에서 주문리스트(paymentList) 가져와서 recyclerview 추가(intent로 보낸 내용)
         paymentList =  getIntent().getParcelableArrayListExtra("paymentList");
@@ -116,8 +121,25 @@ public class PaymentPage extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+
+        // 시간 선택 버튼 클릭 시
+        Button time_picker = findViewById(R.id.time_picker);
+        time_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTime();
+            }
+        });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //가격 중복 방지
+        choice_price=0;
+    }
+
+    //쿠폰 선택 할인율
     private double couponChoice(int position){
         double choice = 0.0;
 
@@ -130,6 +152,20 @@ public class PaymentPage extends AppCompatActivity {
             choice = 0.05;
         }
         return choice;
+    }
+    //timePicker dialog
+    public void showTime() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                time_pick_Text.setText(hourOfDay + "시 " + minute + "분" );
+
+            }
+        }, 21, 12, true);
+
+        timePickerDialog.setMessage("시간 설정");
+        timePickerDialog.show();
     }
 
 }
