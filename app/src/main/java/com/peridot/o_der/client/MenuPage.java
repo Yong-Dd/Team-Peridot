@@ -12,21 +12,21 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MenuPage extends AppCompatActivity {
@@ -40,7 +40,7 @@ public class MenuPage extends AppCompatActivity {
     Button menuPlusButton;
 
     //****변수 추가
-    public static int coffee_position;
+    static int coffee_position;
     static int dessert_position;
     static int tea_position;
     static ArrayList<Payment> paymentList;
@@ -83,51 +83,35 @@ public class MenuPage extends AppCompatActivity {
         coffeerecyclerView.setLayoutManager(layoutManager);//커피리사이클러뷰에 리니어레이아웃매니저 연결
         CoffeeAdapter coffeeAdapter = new CoffeeAdapter();//커피어뎁터 생성
 
-        //db 연결 부분
-        Response.Listener<String> responseListener=new Response.Listener<String>() {
-
+        //커피 db연결, 리사이클러뷰 add
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                Log.d("data1111","LogInCheck onResponse In");
+            public void onResponse(JSONObject response) {
                 try {
-                    JSONObject jasonObject=new JSONObject(response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1));
-                  //  boolean success=jasonObject.getBoolean("success");
-                    Log.d("coffeeName",Integer.toString(jasonObject.length()));
+                    JSONArray jsonArray = response.getJSONArray("response");
+                    JSONObject jsonInnerObject;
 
-                            coffeeId = jasonObject.getString("COFFEE_ID");
-                            String coffeeName = jasonObject.getString("COFFEE_NAME");
-                            String coffePrice = jasonObject.getInt("COFFEE_PRICE")+"원";
-                            Log.d("coffeeName",coffeeName + ","+ coffeeId);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        jsonInnerObject = new JSONObject(jsonArray.get(i).toString());
+                        String coffeeId = jsonInnerObject.getString("COFFEE_ID");
+                        String coffeeName = jsonInnerObject.getString("COFFEE_NAME");
+                        String coffeePrice = jsonInnerObject.getInt("COFFEE_PRICE") + "원";
+                        Log.d("coffeeName", coffeeName + "," + coffeeId);
+                        coffeeAdapter.addItem(new Coffee(coffeeName, coffeePrice));
 
-
-
-
-                        coffeeAdapter.addItem(new Coffee(coffeeName, coffePrice));
-                        coffeerecyclerView.setAdapter(coffeeAdapter);
-
-
+                    }
+                    coffeerecyclerView.setAdapter(coffeeAdapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         };
-        //LogInRequest로 작성한 id, pw 전달
-            for(int i =1; i<4; i++){
-                Log.d("positions", Integer.toString(i));
-                String coffeeIds = Integer.toString(i);
-                MenuRequest menuRequest = new MenuRequest(coffeeIds, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(MenuPage.this);
-                queue.add(menuRequest);
 
-            }
+        //coffee table 요청
+        CoffeeRequest coffeeRequest = new CoffeeRequest(null,responseListener);
+        RequestQueue coffee_queue = Volley.newRequestQueue(MenuPage.this);
+        coffee_queue.add(coffeeRequest);
 
-
-
-
-
-
-
-        //수정
 
         //커피리사이클러뷰에 커피어뎁터 내용 넣기
 
@@ -173,11 +157,33 @@ public class MenuPage extends AppCompatActivity {
         disertrecyclerView.setLayoutManager(layoutManager1);
         DisertAdapter disertAdapter = new DisertAdapter();
 
-        disertAdapter.addItem(new Disert("치즈케이크", "5000원"));
-        disertAdapter.addItem(new Disert("초코케이크", "5000원"));
-        disertAdapter.addItem(new Disert("슈크림", "6000원"));
+        //디저트 db연결, 리사이클러뷰 add
+        Response.Listener<JSONObject> responseListener2 = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray jsonArray = response.getJSONArray("response");
+                    JSONObject jsonInnerObject;
 
-        disertrecyclerView.setAdapter(disertAdapter);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        jsonInnerObject = new JSONObject(jsonArray.get(i).toString());
+                        int dessertId = jsonInnerObject.getInt("DESSERT_ID");
+                        String dessertName = jsonInnerObject.getString("DESSERT_NAME");
+                        String dessertPrice = jsonInnerObject.getInt("DESSERT_PRICE") + "원";
+                        disertAdapter.addItem(new Disert(dessertName, dessertPrice));
+
+                    }
+                    disertrecyclerView.setAdapter(disertAdapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        DessertRequest dessertRequest = new DessertRequest(null,responseListener2);
+        RequestQueue dessert_queue = Volley.newRequestQueue(MenuPage.this);
+        dessert_queue.add(dessertRequest);
+
+        //디저트 터치 리스너
         disertrecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
@@ -207,12 +213,33 @@ public class MenuPage extends AppCompatActivity {
         tearecyclerView.setLayoutManager(layoutManager2);
         TeaAdapter teaAdapter = new TeaAdapter();
 
-        teaAdapter.addItem(new Tea("얼그레이티", "5000원"));
-        teaAdapter.addItem(new Tea("아이스티", "2000원"));
-        teaAdapter.addItem(new Tea("레몬녹차", "3000원"));
+        //티 db연결, 리사이클러뷰 add
+        Response.Listener<JSONObject> responseListener3 = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray jsonArray = response.getJSONArray("response");
+                    JSONObject jsonInnerObject;
 
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        jsonInnerObject = new JSONObject(jsonArray.get(i).toString());
+                        int teaId = jsonInnerObject.getInt("TEA_ID");
+                        String teaName = jsonInnerObject.getString("TEA_NAME");
+                        String teaPrice = jsonInnerObject.getInt("TEA_PRICE") + "원";
+                        teaAdapter.addItem(new Tea(teaName, teaPrice));
 
-        tearecyclerView.setAdapter(teaAdapter);
+                    }
+                    tearecyclerView.setAdapter(teaAdapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        TeaRequest teaRequest = new TeaRequest(null,responseListener3);
+        RequestQueue tea_queue = Volley.newRequestQueue(MenuPage.this);
+        tea_queue.add(teaRequest);
+
+        //tea touch listener
         tearecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {

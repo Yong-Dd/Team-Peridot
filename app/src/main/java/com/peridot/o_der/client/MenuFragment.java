@@ -137,6 +137,8 @@ public class MenuFragment extends Fragment {
 
                 //******총 가격을 (count2)를 MenuPage의 checkItem으로 넘김
                 ((MenuPage)MenuPage.context_menu).checkItem(count2);
+
+
             }
         });
         return rootView;
