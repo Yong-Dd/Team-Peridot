@@ -27,7 +27,8 @@ public class MenuFragment extends Fragment {
     int coffeePrice;     // 커피 가격
 
     TextView coffee_quan;      // 커피 개수
-    TextView Add_btn_text;     // 커프 담기
+    static Button Add_btn_text;     // 커프 담기
+    static TextView menu_name;        // 메뉴 이름
 
     Animation translateDownAnim;
     static int ordercount ;
@@ -35,9 +36,9 @@ public class MenuFragment extends Fragment {
     RadioButton IceBtn;
     Button orderbutton;
 
-    static int count2;
+    static int count2;  //메뉴 가격
 
-    MenuPage menuPage = new MenuPage();
+
 
     @Nullable
     @Override
@@ -49,7 +50,11 @@ public class MenuFragment extends Fragment {
         Add_btn_text = rootView.findViewById(R.id.Add_btn);
         HotBtn = rootView.findViewById(R.id.Hot_btn);
         IceBtn = rootView.findViewById(R.id.Ice_btn);
+        menu_name = rootView.findViewById(R.id.coffee_name);
         count2 = Integer.parseInt(Add_btn_text.getText().toString());
+
+
+
 
         ImageButton closeBtn = rootView.findViewById(R.id.close_btn);         // 닫기 버튼
         closeBtn.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +76,7 @@ public class MenuFragment extends Fragment {
                 count--;
                 coffee_quan.setText(String.valueOf(count));
 
-                count2 -= 3000;
+                count2 -= count2;
                 String text = String.valueOf(count2)+"원 담기";
                 String texts = "0원 담기";
                 Add_btn_text.setText(text);
@@ -99,7 +104,7 @@ public class MenuFragment extends Fragment {
                 count++;
                 coffee_quan.setText(String.valueOf(count));
 
-                count2 += 3000;
+                count2 += count2;
                 String text = String.valueOf(count2)+"원 담기";
                 Add_btn_text.setText(text);
 
@@ -138,12 +143,35 @@ public class MenuFragment extends Fragment {
                 //******총 가격을 (count2)를 MenuPage의 checkItem으로 넘김
                 ((MenuPage)MenuPage.context_menu).checkItem(count2);
 
-
             }
         });
         return rootView;
 
     }
 
+    public void ItemSetting(){
+        int coffee= ((MenuPage)MenuPage.context_menu).coffee_position;
+        int dessert = ((MenuPage)MenuPage.context_menu).dessert_position;
+        int tea = ((MenuPage)MenuPage.context_menu).tea_position;
+
+        String menuName = "";
+
+        if(coffee>-1){
+            menuName = ((MenuPage)MenuPage.context_menu).coffeeAdapter.getItem(coffee).getName();
+            count2 = ((MenuPage)MenuPage.context_menu).db_coffeePrice.get(coffee);
+
+        }else if(dessert>-1){
+            menuName = ((MenuPage)MenuPage.context_menu).disertAdapter.getItem(dessert).getName();
+            count2 = ((MenuPage)MenuPage.context_menu).db_dessertPrice.get(dessert);
+
+        }else if(tea>-1){
+            menuName = ((MenuPage)MenuPage.context_menu).teaAdapter.getItem(tea).getName();
+            count2 = ((MenuPage)MenuPage.context_menu).db_dessertPrice.get(tea);
+
+        }
+        String price_text = count2+"원";
+        Add_btn_text.setText(price_text);
+        menu_name.setText(menuName);
+    }
 
 }

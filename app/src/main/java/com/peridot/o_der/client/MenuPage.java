@@ -39,11 +39,21 @@ public class MenuPage extends AppCompatActivity {
     Button orderbutton;
     Button menuPlusButton;
 
-    //****변수 추가
+    //각 리싸이클러뷰 포지션
     static int coffee_position;
     static int dessert_position;
     static int tea_position;
+    //Payment Page에 넘길 주문 리스트
     static ArrayList<Payment> paymentList;
+
+    static CoffeeAdapter coffeeAdapter;
+    static DisertAdapter disertAdapter;
+    static TeaAdapter teaAdapter;
+
+    //MenuFragment 전달 위함
+    static ArrayList<Integer> db_coffeePrice;
+    static ArrayList<Integer> db_dessertPrice;
+    static ArrayList<Integer> db_teaPrice;
 
     String coffeeId;
 
@@ -59,6 +69,10 @@ public class MenuPage extends AppCompatActivity {
         coffee_position = -1;
         dessert_position = -1;
         tea_position = -1;
+
+        db_coffeePrice = new ArrayList<>();
+        db_dessertPrice = new ArrayList<>();
+        db_teaPrice = new ArrayList<>();
         //****여기까지
 
         context_menu = this; //다른 액티비티에서 MenuPage 변수를 사용할 수 있음
@@ -81,7 +95,7 @@ public class MenuPage extends AppCompatActivity {
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);// 리니어레이아웃매니저 생성
         coffeerecyclerView.setLayoutManager(layoutManager);//커피리사이클러뷰에 리니어레이아웃매니저 연결
-        CoffeeAdapter coffeeAdapter = new CoffeeAdapter();//커피어뎁터 생성
+        coffeeAdapter = new CoffeeAdapter();//커피어뎁터 생성
 
         //커피 db연결, 리사이클러뷰 add
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
@@ -95,9 +109,13 @@ public class MenuPage extends AppCompatActivity {
                         jsonInnerObject = new JSONObject(jsonArray.get(i).toString());
                         String coffeeId = jsonInnerObject.getString("COFFEE_ID");
                         String coffeeName = jsonInnerObject.getString("COFFEE_NAME");
-                        String coffeePrice = jsonInnerObject.getInt("COFFEE_PRICE") + "원";
+                        int inDB_coffeePrice = jsonInnerObject.getInt("COFFEE_PRICE");
+                        String coffeePrice = inDB_coffeePrice + "원";
                         Log.d("coffeeName", coffeeName + "," + coffeeId);
                         coffeeAdapter.addItem(new Coffee(coffeeName, coffeePrice));
+
+                        //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
+                        db_coffeePrice.add(i,inDB_coffeePrice);
 
                     }
                     coffeerecyclerView.setAdapter(coffeeAdapter);
@@ -155,7 +173,7 @@ public class MenuPage extends AppCompatActivity {
         LinearLayoutManager layoutManager1 =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         disertrecyclerView.setLayoutManager(layoutManager1);
-        DisertAdapter disertAdapter = new DisertAdapter();
+        disertAdapter = new DisertAdapter();
 
         //디저트 db연결, 리사이클러뷰 add
         Response.Listener<JSONObject> responseListener2 = new Response.Listener<JSONObject>() {
@@ -169,8 +187,12 @@ public class MenuPage extends AppCompatActivity {
                         jsonInnerObject = new JSONObject(jsonArray.get(i).toString());
                         int dessertId = jsonInnerObject.getInt("DESSERT_ID");
                         String dessertName = jsonInnerObject.getString("DESSERT_NAME");
-                        String dessertPrice = jsonInnerObject.getInt("DESSERT_PRICE") + "원";
+                        int inDB_dessertPrice = jsonInnerObject.getInt("DESSERT_PRICE");
+                        String dessertPrice = inDB_dessertPrice + "원";
                         disertAdapter.addItem(new Disert(dessertName, dessertPrice));
+
+                        //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
+                        db_dessertPrice.add(i,inDB_dessertPrice);
 
                     }
                     disertrecyclerView.setAdapter(disertAdapter);
@@ -211,7 +233,7 @@ public class MenuPage extends AppCompatActivity {
         LinearLayoutManager layoutManager2 =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         tearecyclerView.setLayoutManager(layoutManager2);
-        TeaAdapter teaAdapter = new TeaAdapter();
+        teaAdapter = new TeaAdapter();
 
         //티 db연결, 리사이클러뷰 add
         Response.Listener<JSONObject> responseListener3 = new Response.Listener<JSONObject>() {
@@ -225,8 +247,12 @@ public class MenuPage extends AppCompatActivity {
                         jsonInnerObject = new JSONObject(jsonArray.get(i).toString());
                         int teaId = jsonInnerObject.getInt("TEA_ID");
                         String teaName = jsonInnerObject.getString("TEA_NAME");
-                        String teaPrice = jsonInnerObject.getInt("TEA_PRICE") + "원";
+                        int inDB_teaPrice = jsonInnerObject.getInt("TEA_PRICE");
+                        String teaPrice = inDB_teaPrice + "원";
                         teaAdapter.addItem(new Tea(teaName, teaPrice));
+
+                        //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
+                        db_teaPrice.add(i,inDB_teaPrice);
 
                     }
                     tearecyclerView.setAdapter(teaAdapter);
@@ -312,25 +338,21 @@ public class MenuPage extends AppCompatActivity {
     MenuFragment에서 넘어온 거라서 그 당시의 position으로 선택을 알 수 있음*/
     public void checkItem(int price){
         Log.d("paymentList","MenuPage, checkItem called"+price);
+
+        //PaymentPage에 전달한 메뉴 이름
         String itemName = "";
 
         //여러 메뉴 선택시, 메뉴 중복을 피하기 위해 각 position을 -1로 변경
-         switch (coffee_position){
-            case 0: itemName = "아메리카노"; coffee_position = -1; break;
-            case 1: itemName = "카푸치노"; coffee_position = -1; break;
-            case 2: itemName = "카라멜 마끼야또"; coffee_position = -1; break;
-            default: break;
-        }
-        switch (dessert_position){
-            case 0: itemName = "치즈케이크"; dessert_position = -1; break;
-            case 1: itemName = "초코케이크"; dessert_position = -1; break;
-            case 2: itemName = "슈크림"; dessert_position = -1; break;
-            default: break;
-        }
-        switch (tea_position){
-            case 0: itemName = "얼그레이티"; tea_position = -1; break;
-            case 1: itemName = "아이스티"; tea_position = -1; break;
-            case 2: itemName = "레몬 녹차";tea_position = -1; break;
+        Log.d("positionsss","size: "+coffeeAdapter.getItemCount());
+        if(coffee_position>-1){
+            itemName = coffeeAdapter.getItem(coffee_position).getName();
+            coffee_position = -1;
+        }else if(dessert_position>-1){
+            itemName = disertAdapter.getItem(dessert_position).getName();
+            dessert_position = -1;
+        }else if(tea_position>-1){
+            itemName = teaAdapter.getItem(tea_position).getName();
+            tea_position = -1;
         }
 
         if(!itemName.equals("")){

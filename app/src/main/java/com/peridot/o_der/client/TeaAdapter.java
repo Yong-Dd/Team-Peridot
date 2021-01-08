@@ -38,6 +38,7 @@ public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
+        MenuFragment menuFragment = new MenuFragment();
         TextView teaname;
         TextView teaprice;
 
@@ -54,6 +55,11 @@ public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.ViewHolder> {
             menuplusbutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //해당 position외 다른 메뉴 position 값이 있으면 ItemSetting이 제대로 동작안함
+                    ((MenuPage)MenuPage.context_menu).coffee_position=-1;
+                    ((MenuPage)MenuPage.context_menu).dessert_position=-1;
+                    menuFragment.ItemSetting();
+
                     orderbutton.setVisibility(View.GONE);
                     fragmentPage.setVisibility(View.VISIBLE);
                     fragmentPage.startAnimation(translateUpAnim);

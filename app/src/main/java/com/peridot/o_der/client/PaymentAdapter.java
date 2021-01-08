@@ -48,6 +48,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
+
         TextView payment_coffeeName;
         TextView payment_coffeePrice;
 

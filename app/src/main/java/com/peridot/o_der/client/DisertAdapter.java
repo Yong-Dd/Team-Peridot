@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class DisertAdapter extends RecyclerView.Adapter<DisertAdapter.ViewHolder> {
-        ArrayList<Disert> items = new ArrayList<Disert>();
+    ArrayList<Disert> items = new ArrayList<Disert>();
 
 @NonNull
 @Override
@@ -39,6 +39,7 @@ public int getItemCount() {
         }
 
 static class ViewHolder extends RecyclerView.ViewHolder{
+    MenuFragment menuFragment = new MenuFragment();
     TextView disertname;
     TextView disertprice;
 
@@ -56,6 +57,11 @@ static class ViewHolder extends RecyclerView.ViewHolder{
         menuplusbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //해당 position외 다른 메뉴 position 값이 있으면 ItemSetting이 제대로 동작안함
+                ((MenuPage)MenuPage.context_menu).coffee_position=-1;
+                ((MenuPage)MenuPage.context_menu).tea_position=-1;
+                menuFragment.ItemSetting();
+
                 orderbutton.setVisibility(View.GONE);
                 fragmentPage.setVisibility(View.VISIBLE);
                 fragmentPage.startAnimation(translateUpAnim);

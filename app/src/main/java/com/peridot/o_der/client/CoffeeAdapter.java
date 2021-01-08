@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder>
  {
     ArrayList<Coffee> items = new ArrayList<Coffee>();
-    MenuPage menuPage = new MenuPage();
+    MenuFragment menuFragment = new MenuFragment();
 
     @NonNull
     @Override
@@ -65,6 +65,11 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
             menuplusbutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //해당 position외 다른 메뉴 position 값이 있으면 ItemSetting이 제대로 동작안함
+                    ((MenuPage)MenuPage.context_menu).dessert_position=-1;
+                    ((MenuPage)MenuPage.context_menu).tea_position=-1;
+                    menuFragment.ItemSetting();
+
                     orderbutton.setVisibility(View.GONE);
                     fragmentPage.setVisibility(View.VISIBLE);
                     fragmentPage.startAnimation(translateUpAnim);
