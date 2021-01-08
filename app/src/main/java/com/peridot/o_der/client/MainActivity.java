@@ -1,5 +1,6 @@
 package com.peridot.o_der.client;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -17,18 +18,22 @@ public class MainActivity extends AppCompatActivity {
     Button login_button;
     TextView customer_textView;
 
+    public static Context context_main;
+    static boolean login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context_main = this;
 
         imageView = findViewById(R.id.imageView2);
         Drawable alpha1 = imageView.getBackground();
         alpha1.setAlpha(100);
 
         //로그인시 이름 textView
-        customer_textView = findViewById(R.id.customer_textView);
+        customer_textView = findViewById(R.id.mainpagetext);
 
         //로그인 버튼 - 로그인 화면으로 이동
         login_button = findViewById(R.id.main_logInButton);
@@ -40,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 //애니메이션 효과
                 overridePendingTransition(R.anim.login_page_slide_in_right, R.anim.login_page_slide_out_left);
+
+                login = ((LoginPage)LoginPage.context_login).login;
+                if (login){
+                    customer_textView.setVisibility(View.GONE);
+                    login_button.setText("로그인");
+                    login = false;
+                }
             }
         });
 
@@ -69,6 +81,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        RelativeLayout insta = findViewById(R.id.instaLayout);
+        insta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), InstagramPage.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                //애니메이션 효과
+                overridePendingTransition(R.anim.login_page_slide_in_right,R.anim.login_page_slide_out_left);
+            }
+        });
+
         //LogIn Page에서 성공시 넘어옴
         Intent intent = getIntent();
         customerName(intent);
@@ -81,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
             Bundle bundle = intent.getExtras();
             if(bundle !=null){
                 String customerName = bundle.getString("customerName");
-                customer_textView.setText("환영합니다" +customerName + "님");
+                customer_textView.setVisibility(View.VISIBLE);
+                customer_textView.setText("환영합니다 \n" +customerName + "님");
                 login_button.setText("로그아웃");
             }
         }

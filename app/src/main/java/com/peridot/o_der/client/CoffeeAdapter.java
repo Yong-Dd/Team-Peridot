@@ -2,6 +2,7 @@ package com.peridot.o_der.client;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder>
  {
     ArrayList<Coffee> items = new ArrayList<Coffee>();
+    MenuPage menuPage = new MenuPage();
 
     @NonNull
     @Override
@@ -57,6 +59,8 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
             Button orderbutton = ((MenuPage)MenuPage.context_menu).findViewById(R.id.orderbutton);
             Animation translateUpAnim = ((MenuPage)MenuPage.context_menu).translateUpAnim;
             LinearLayout fragmentPage = ((MenuPage)MenuPage.context_menu).findViewById(R.id.fragmentPage);
+            //int coffee_position = ((MenuPage)MenuPage.context_menu).coffee_position;
+            //String coffeeid = ((MenuPage)MenuPage.context_menu).coffeeId;
 
             menuplusbutton.setOnClickListener(new View.OnClickListener() {
                 @Override

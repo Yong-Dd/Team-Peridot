@@ -12,11 +12,19 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,10 +40,12 @@ public class MenuPage extends AppCompatActivity {
     Button menuPlusButton;
 
     //****변수 추가
-    static int coffee_position;
+    public static int coffee_position;
     static int dessert_position;
     static int tea_position;
     static ArrayList<Payment> paymentList;
+
+    String coffeeId;
 
 
 
@@ -73,11 +83,53 @@ public class MenuPage extends AppCompatActivity {
         coffeerecyclerView.setLayoutManager(layoutManager);//커피리사이클러뷰에 리니어레이아웃매니저 연결
         CoffeeAdapter coffeeAdapter = new CoffeeAdapter();//커피어뎁터 생성
 
-        coffeeAdapter.addItem(new Coffee("아메리카노", "3000원"));//커피어뎁터에 내용 추가
-        coffeeAdapter.addItem(new Coffee("카푸치노", "5000원"));//커피어뎁터에 내용 추가
-        coffeeAdapter.addItem(new Coffee("카라멜 마끼야또", "4000원"));//커피어뎁터에 내용 추가
+        //db 연결 부분
+        Response.Listener<String> responseListener=new Response.Listener<String>() {
 
-        coffeerecyclerView.setAdapter(coffeeAdapter); //커피리사이클러뷰에 커피어뎁터 내용 넣기
+            @Override
+            public void onResponse(String response) {
+                Log.d("data1111","LogInCheck onResponse In");
+                try {
+                    JSONObject jasonObject=new JSONObject(response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1));
+                  //  boolean success=jasonObject.getBoolean("success");
+                    Log.d("coffeeName",Integer.toString(jasonObject.length()));
+
+                            coffeeId = jasonObject.getString("COFFEE_ID");
+                            String coffeeName = jasonObject.getString("COFFEE_NAME");
+                            String coffePrice = jasonObject.getInt("COFFEE_PRICE")+"원";
+                            Log.d("coffeeName",coffeeName + ","+ coffeeId);
+
+
+
+
+                        coffeeAdapter.addItem(new Coffee(coffeeName, coffePrice));
+                        coffeerecyclerView.setAdapter(coffeeAdapter);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        //LogInRequest로 작성한 id, pw 전달
+            for(int i =1; i<4; i++){
+                Log.d("positions", Integer.toString(i));
+                String coffeeIds = Integer.toString(i);
+                MenuRequest menuRequest = new MenuRequest(coffeeIds, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(MenuPage.this);
+                queue.add(menuRequest);
+
+            }
+
+
+
+
+
+
+
+        //수정
+
+        //커피리사이클러뷰에 커피어뎁터 내용 넣기
 
         final GestureDetector gestureDetector = new GestureDetector(MenuPage.this,new GestureDetector.SimpleOnGestureListener()
         {

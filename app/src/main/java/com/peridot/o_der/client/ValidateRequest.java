@@ -11,13 +11,13 @@ import java.util.Map;
 
 public class ValidateRequest extends StringRequest {
 
-    final static  private String URL = "http://simssbook9.cafe24.com/UserValidate.php"; //DB파일이 없으므로 샘플 사이트 첨부
+    final static  private String URL = "http://teamperidot.dothome.co.kr/validate.php"; //DB파일이 없으므로 샘플 사이트 첨부
     private Map<String, String> parameters;
 
-    public ValidateRequest(String userID, Response.Listener<String> listener){
+    public ValidateRequest(String ID, Response.Listener<String> listener){
         super(Method.POST, URL, listener, null);
         parameters = new HashMap<>();
-        parameters.put("userID",userID);
+        parameters.put("ID",ID);
     }
 
     @Override

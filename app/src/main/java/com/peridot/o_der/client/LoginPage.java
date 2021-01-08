@@ -1,5 +1,6 @@
 package com.peridot.o_der.client;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,8 @@ public class LoginPage extends AppCompatActivity {
 
     TextView idText;
     TextView pwText;
+    public static Context context_login;
+    static boolean login;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +34,8 @@ public class LoginPage extends AppCompatActivity {
 
         idText = findViewById(R.id.idText);
         pwText = findViewById(R.id.pwText);
+
+        context_login = this;
 
         //로그인 버튼
         Button loginButton = findViewById(R.id.loginButton);
@@ -94,7 +99,7 @@ public class LoginPage extends AppCompatActivity {
                     //로그인 성공
                     if (success) {
                         Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-
+                        login = true;
                         //로그인 고객이름 Main activity로 전달
                         String customerName = jasonObject.getString("NAME");
                         Intent intent = new Intent(LoginPage.this, MainActivity.class);

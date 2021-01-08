@@ -1,5 +1,6 @@
 package com.peridot.o_der.client;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,10 +18,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 public class JoinPage extends AppCompatActivity {
-    private String userID;
-    private String userPassword;
-    private String userName;
-    private String userTel;
+    private String ID;
+    private String PW;
+    private String NAME;
+    private String TEL;
     private AlertDialog dialog;
     private boolean validate = false;
     @Override
@@ -38,12 +39,11 @@ public class JoinPage extends AppCompatActivity {
         validateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                String userID = idText.getText().toString();
+                String ID = idText.getText().toString();
                 if (validate) {
                     return;
                 }
-                if (userID.equals("")) {
+                if (ID.equals("")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(JoinPage.this);
                     dialog = builder.setMessage("아이디는 빈 칸일 수 없습니다.")
                             .setPositiveButton("확인", null)
@@ -55,7 +55,7 @@ public class JoinPage extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonResponse = new JSONObject(response);
+                            JSONObject jsonResponse = new JSONObject(response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1));
                             boolean success = jsonResponse.getBoolean("success");
 
                             if (success) {
@@ -82,7 +82,7 @@ public class JoinPage extends AppCompatActivity {
 
                     }
                 };
-                ValidateRequest validateRequest = new ValidateRequest(userID, responseListener);
+                ValidateRequest validateRequest = new ValidateRequest(ID, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(JoinPage.this);
                 queue.add(validateRequest);
             }
@@ -93,10 +93,10 @@ public class JoinPage extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                String userID = idText.getText().toString();
-                String userPassword = passwordText.getText().toString();
-                String userName = nameText.getText().toString();
-                String userTel = phoneNumText.getText().toString();
+                 ID = idText.getText().toString();
+                 PW = passwordText.getText().toString();
+                 NAME = nameText.getText().toString();
+                 TEL = phoneNumText.getText().toString();
 
 
                 if (!validate) {
@@ -108,7 +108,7 @@ public class JoinPage extends AppCompatActivity {
                     return;
                 }
 
-                if (userID.equals("") || userPassword.equals("") || userName.equals("") || userTel.equals("")) {
+                if (ID.equals("") || PW.equals("") || NAME.equals("") || TEL.equals("")) {
                     Log.d("TAG","click");
                     AlertDialog.Builder builder = new AlertDialog.Builder(JoinPage.this);
                     dialog = builder.setMessage("빈 칸 없이 입력해주세요.")
@@ -123,17 +123,21 @@ public class JoinPage extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonResponse = new JSONObject(response);
+                            JSONObject jsonResponse = new JSONObject(response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1));
                             boolean success = jsonResponse.getBoolean("success");
 
                             if (success) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(JoinPage.this);
                                 dialog = builder.setMessage("회원 등록에 성공했습니다.")
-                                        .setPositiveButton("확인", null)
+                                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                finish();
+                                            }
+                                        })
                                         .create();
                                 dialog.show();
 
-                                finish();
 
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(JoinPage.this);
@@ -149,7 +153,7 @@ public class JoinPage extends AppCompatActivity {
 
                     }
                 };
-                RegisterRequest registerRequest = new RegisterRequest(userID, userPassword, userName, userTel, responseListener);
+                RegisterRequest registerRequest = new RegisterRequest(ID, PW, NAME, TEL, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(JoinPage.this);
                 queue.add(registerRequest);
 

@@ -29,7 +29,7 @@
 
         <Button
             android:id="@+id/main_logInButton"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:background="@drawable/main_page_rect_login"
             android:insetTop="0dp"
@@ -42,17 +42,6 @@
             app:backgroundTintMode="add"
             app:strokeColor="#FFFFFF" />
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/customer_textView"
-        android:layout_width="114dp"
-        android:layout_height="50dp"
-        android:layout_alignLeft="@id/imageView2"
-        android:layout_alignBottom="@id/insta_icon_rect"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="177dp"
-        android:layout_marginBottom="199dp" />
 
     <RelativeLayout
         android:id="@+id/orderLayout"
@@ -99,7 +88,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/insta_icon_rect"
+        android:id="@+id/instaLayout"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_centerInParent="true"
@@ -112,4 +101,24 @@
             android:layout_height="64dp"
             app:srcCompat="@drawable/instagram_icon" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/mainpagetext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="59dp"
+        android:layout_marginBottom="400dp"
+        android:gravity="center"
+        android:text="환영합니다 000님"
+        android:textColor="#695653"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:visibility="gone"/>
 </RelativeLayout>
