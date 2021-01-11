@@ -39,7 +39,7 @@ public int getItemCount() {
         }
 
 static class ViewHolder extends RecyclerView.ViewHolder{
-    MenuFragment menuFragment = new MenuFragment();
+    static MenuFragment menuFragment = new MenuFragment();
     TextView disertname;
     TextView disertprice;
 

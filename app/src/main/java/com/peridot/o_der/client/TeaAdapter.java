@@ -38,7 +38,7 @@ public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        MenuFragment menuFragment = new MenuFragment();
+        static MenuFragment menuFragment = new MenuFragment();
         TextView teaname;
         TextView teaprice;
 

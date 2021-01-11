@@ -151,7 +151,7 @@ public class MenuPage extends AppCompatActivity {
                 int position = coffeerecyclerView.getChildAdapterPosition(child);//해당 좌표가 몇번째 리사이클러뷰인지
 
                 if(child!=null&&gestureDetector.onTouchEvent(e)){
-                 coffee_position = position;
+                    coffee_position = position;
                 }
 
                 return false;
@@ -249,6 +249,7 @@ public class MenuPage extends AppCompatActivity {
                         String teaName = jsonInnerObject.getString("TEA_NAME");
                         int inDB_teaPrice = jsonInnerObject.getInt("TEA_PRICE");
                         String teaPrice = inDB_teaPrice + "원";
+                        Log.d("teatea","tea:"+teaName+","+teaPrice);
                         teaAdapter.addItem(new Tea(teaName, teaPrice));
 
                         //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
@@ -295,11 +296,11 @@ public class MenuPage extends AppCompatActivity {
         orderbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent intent = new Intent(getApplicationContext(),PaymentPage.class);
-               intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-               Log.d("paymentList",Integer.toString(paymentList.size()));
-               intent.putParcelableArrayListExtra("paymentList", (ArrayList<? extends Parcelable>) paymentList);
-               startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(),PaymentPage.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Log.d("paymentList",Integer.toString(paymentList.size()));
+                intent.putParcelableArrayListExtra("paymentList", (ArrayList<? extends Parcelable>) paymentList);
+                startActivity(intent);
 
 
             }
@@ -333,9 +334,9 @@ public class MenuPage extends AppCompatActivity {
         }
     } //애니메이션리스너 implements Animationi.AnimationListener가 핵심
 
-   /**** MenuFragment에서 받은 가격과 recycler의 addOnItemTouchListener에서 받은 위치를
-    arraylist(paymentList)에 저장, MenuFragment에서 추가 하는 순서대로 paymentList에 추가됨
-    MenuFragment에서 넘어온 거라서 그 당시의 position으로 선택을 알 수 있음*/
+    /**** MenuFragment에서 받은 가격과 recycler의 addOnItemTouchListener에서 받은 위치를
+     arraylist(paymentList)에 저장, MenuFragment에서 추가 하는 순서대로 paymentList에 추가됨
+     MenuFragment에서 넘어온 거라서 그 당시의 position으로 선택을 알 수 있음*/
     public void checkItem(int price){
         Log.d("paymentList","MenuPage, checkItem called"+price);
 

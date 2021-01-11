@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder>
  {
     ArrayList<Coffee> items = new ArrayList<Coffee>();
-    MenuFragment menuFragment = new MenuFragment();
+    static MenuFragment menuFragment = new MenuFragment();
 
     @NonNull
     @Override
