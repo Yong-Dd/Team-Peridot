@@ -337,12 +337,12 @@ public class MenuPage extends AppCompatActivity {
     /**** MenuFragment에서 받은 가격과 recycler의 addOnItemTouchListener에서 받은 위치를
      arraylist(paymentList)에 저장, MenuFragment에서 추가 하는 순서대로 paymentList에 추가됨
      MenuFragment에서 넘어온 거라서 그 당시의 position으로 선택을 알 수 있음*/
-    public void checkItem(int price){
+    public void checkItem(int price, int count, String hotIce){
         Log.d("paymentList","MenuPage, checkItem called"+price);
 
         //PaymentPage에 전달한 메뉴 이름
         String itemName = "";
-
+        String dessertHotIce = hotIce;
         //여러 메뉴 선택시, 메뉴 중복을 피하기 위해 각 position을 -1로 변경
         Log.d("positionsss","size: "+coffeeAdapter.getItemCount());
         if(coffee_position>-1){
@@ -351,6 +351,7 @@ public class MenuPage extends AppCompatActivity {
         }else if(dessert_position>-1){
             itemName = disertAdapter.getItem(dessert_position).getName();
             dessert_position = -1;
+            dessertHotIce = "";
         }else if(tea_position>-1){
             itemName = teaAdapter.getItem(tea_position).getName();
             tea_position = -1;
@@ -358,8 +359,11 @@ public class MenuPage extends AppCompatActivity {
 
         if(!itemName.equals("")){
             Log.d("paymentList","checkItem add, itemName: "+itemName);
-            paymentList.add(new Payment(itemName, price));
+            paymentList.add(new Payment(itemName, price,count,dessertHotIce));
         }
+    }
+    public void close(){
+        finish();
     }
 
 }

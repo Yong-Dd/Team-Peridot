@@ -38,8 +38,10 @@ public class MenuFragment extends Fragment {
     RadioButton IceBtn;
     Button orderbutton;
 
+    int count; //개수
     static int count2;  //메뉴 가격
     static int count3;  //총 값
+    static String hotIce;//아이스 ,핫 선택
 
 
 
@@ -59,6 +61,8 @@ public class MenuFragment extends Fragment {
         menu_name = rootView.findViewById(R.id.coffee_name);
         count2 = Integer.parseInt(Add_btn_text.getText().toString());
         count3 = Integer.parseInt(Add_btn_text.getText().toString());
+        count = 1;
+        hotIce = "";
 
 
         ImageButton closeBtn = rootView.findViewById(R.id.close_btn);         // 닫기 버튼
@@ -77,6 +81,7 @@ public class MenuFragment extends Fragment {
                     orderbutton.setVisibility(View.VISIBLE);
                     orderbutton.startAnimation(translateUpAnim);
                 }
+                count = 1;
             }
         });
 
@@ -84,7 +89,7 @@ public class MenuFragment extends Fragment {
         minusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int count = Integer.parseInt(coffee_quan.getText().toString());
+                count = Integer.parseInt(coffee_quan.getText().toString());
                 count--;
                 coffee_quan.setText(String.valueOf(count));
 
@@ -112,7 +117,7 @@ public class MenuFragment extends Fragment {
         plusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int count = Integer.parseInt(coffee_quan.getText().toString());
+                count = Integer.parseInt(coffee_quan.getText().toString());
                 count++;
                 coffee_quan.setText(String.valueOf(count));
 
@@ -152,10 +157,17 @@ public class MenuFragment extends Fragment {
                         Toast.makeText(getContext(), "잘못된 개수입니다", Toast.LENGTH_LONG).show();
                     }
                 }
+                if(HotBtn.isChecked() == true && IceBtn.isChecked() == false){
+                    hotIce = "(핫)";
+                }else if(IceBtn.isChecked() == true && HotBtn.isChecked() == false){
+                    hotIce = "(아이스)";
+                }
+
 
 
                 //******총 가격을 (count2)를 MenuPage의 checkItem으로 넘김
-                ((MenuPage)MenuPage.context_menu).checkItem(count3);
+                ((MenuPage)MenuPage.context_menu).checkItem(count3,count,hotIce);
+                count = 1;
 
             }
         });

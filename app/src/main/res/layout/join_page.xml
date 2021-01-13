@@ -118,7 +118,9 @@
                 android:hint="이름"
                 android:padding="5dp"
                 android:textColor="#ffffff"
-                android:textColorHint="#ffffff" />
+                android:textColorHint="#ffffff"
+                android:maxLines="1"
+                android:inputType="text"/>
 
             <EditText
                 android:id="@+id/phoneNumText"
@@ -130,7 +132,8 @@
                 android:hint="전화번호"
                 android:padding="5dp"
                 android:textColor="#ffffff"
-                android:textColorHint="#ffffff" />
+                android:textColorHint="#ffffff"
+                android:inputType="phone"/>
 
 
             <Button

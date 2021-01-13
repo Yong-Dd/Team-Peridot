@@ -6,19 +6,33 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PaymentPage extends AppCompatActivity {
 
@@ -26,6 +40,8 @@ public class PaymentPage extends AppCompatActivity {
     String[] coupons = {"선택 안함", "첫 가입 축하 쿠폰 - 20%","생일 기념 쿠폰 - 10%", "오늘의 메뉴 할인 - 5%"};
     // 픽업 시간 Text
     TextView time_pick_Text;
+
+    EditText memo_editText;
 
     //결제할 총 금액
     static int choice_price = 0;
@@ -35,11 +51,14 @@ public class PaymentPage extends AppCompatActivity {
 
     ArrayList<Payment> paymentList;
 
+    static String pick_time;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_page);
 
+        memo_editText = findViewById(R.id.memo_editText);
 
         //리싸이클러뷰 LinearLayoutManager 설정
         recyclerView = (RecyclerView) findViewById(R.id.payment_recyclerview);
@@ -52,6 +71,7 @@ public class PaymentPage extends AppCompatActivity {
 
         //time picker
         time_pick_Text = findViewById(R.id.time_picker);
+        pick_time = "";
 
         //MenuPage에서 주문리스트(paymentList) 가져와서 recyclerview 추가(intent로 보낸 내용)
         paymentList =  getIntent().getParcelableArrayListExtra("paymentList");
@@ -59,7 +79,9 @@ public class PaymentPage extends AppCompatActivity {
             for(int i =0; i<paymentList.size(); i++){
                 String coffeeName = paymentList.get(i).coffeeName;
                 int coffeePrice = paymentList.get(i).coffeePrice;
-                adapter.addItem(new Payment(coffeeName,coffeePrice ));
+                int count = paymentList.get(i).count;
+                String hotIce = paymentList.get(i).hotIce;
+                adapter.addItem(new Payment(coffeeName,coffeePrice,count,hotIce ));
 
                 //결제할 금액 계산
                 choice_price += coffeePrice;
@@ -81,12 +103,77 @@ public class PaymentPage extends AppCompatActivity {
             }
         });
 
-        //결제하기 버튼 - Toast 띄우기
+        //결제하기 버튼 -
         Button payment_button = findViewById(R.id.payment_button);
         payment_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //로그인시 customer id 받아오기 (미로그인시 id = 0)
+                MainActivity mainActivity = new MainActivity();
+                int CUSTOMER_ID = mainActivity.CUSTOMER_ID;
 
+                //주문일자
+                Date today = new Date();
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+                String ORDER_DATE = format1.format(today);
+
+                String ORDER_MENU="";
+                int ORDER_PRICE = choice_price;
+
+                //선택한 시간 가져오기
+                String PICKUP_TIME = pick_time;
+
+                //주문 메모 받아오기
+                String ORDER_MEMO = memo_editText.getText().toString();
+
+                //db에 넘길 자료 준비
+                if(paymentList!=null){
+                    for(int i =0; i<paymentList.size(); i++){
+                        String coffeeName = paymentList.get(i).coffeeName;
+                        int count = paymentList.get(i).count;
+                        String hotIce = paymentList.get(i).hotIce;
+                        String orderMenu = coffeeName+hotIce+count+"개";
+                     ORDER_MENU += orderMenu+"\n";
+
+                        Toast.makeText(getApplicationContext(),"결제가 완료되었습니다",Toast.LENGTH_SHORT).show();
+                        //메인(홈)으로 돌아감
+                        ((MenuPage)MenuPage.context_menu).close();
+                        finish();
+
+
+                    }
+                    }else{
+                        Toast.makeText(getApplicationContext(),"메뉴를 선택해주세요",Toast.LENGTH_SHORT).show();
+                    }
+                //response listener
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                };
+                OrderListUploadRequest orderListUploadRequest = new OrderListUploadRequest(CUSTOMER_ID,
+                        ORDER_DATE, ORDER_MENU, ORDER_PRICE, PICKUP_TIME, ORDER_MEMO, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(PaymentPage.this);
+                queue.add(orderListUploadRequest);
+                }
+
+
+
+
+        });
+
+        final GestureDetector gestureDetector = new GestureDetector(PaymentPage.this,new GestureDetector.SimpleOnGestureListener()
+        {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e)
+            {
+                return true;
             }
         });
 
@@ -130,6 +217,9 @@ public class PaymentPage extends AppCompatActivity {
                 showTime();
             }
         });
+
+
+
     }
 
     @Override
@@ -158,8 +248,8 @@ public class PaymentPage extends AppCompatActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-                time_pick_Text.setText(hourOfDay + "시 " + minute + "분" );
+                pick_time = hourOfDay + "시 " + minute + "분";
+                time_pick_Text.setText(pick_time );
 
             }
         }, 21, 12, true);

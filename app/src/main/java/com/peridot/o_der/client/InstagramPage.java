@@ -13,8 +13,8 @@ import java.net.URL;
 
 public class InstagramPage extends AppCompatActivity {
     WebView webView;
-    String url = "https://m.instagram.com/oder3679/";
-
+   // String url = "https://m.instagram.com/oder3679/";
+    String url = "https://www.instagram.com/p/CJ7-6pCHsHi/?utm_source=ig_web_copy_link";
     @Override
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

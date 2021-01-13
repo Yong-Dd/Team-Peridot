@@ -179,14 +179,15 @@
                     android:ems="10"
                     android:gravity="top"
                     android:hint="간단한 메모를 입력해 주세요"
-                    android:inputType="textPersonName"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:singleLine="false"
                     android:textColor="#695653"
                     android:textColorHint="#695653"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:inputType="textMultiLine"
+                    android:maxLength="95"/>
             </RelativeLayout>
 
             <RelativeLayout

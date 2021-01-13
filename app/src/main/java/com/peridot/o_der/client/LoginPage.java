@@ -102,8 +102,10 @@ public class LoginPage extends AppCompatActivity {
                         login = true;
                         //로그인 고객이름 Main activity로 전달
                         String customerName = jasonObject.getString("NAME");
+                        int customerId = jasonObject.getInt("CUSTOMER_ID");
                         Intent intent = new Intent(LoginPage.this, MainActivity.class);
                         intent.putExtra("customerName", customerName);
+                        intent.putExtra("customerId",customerId);
                         startActivity(intent);
 
 

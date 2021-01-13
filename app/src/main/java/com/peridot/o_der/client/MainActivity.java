@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     public static Context context_main;
     static boolean login;
 
+    static int CUSTOMER_ID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
             Bundle bundle = intent.getExtras();
             if(bundle !=null){
                 String customerName = bundle.getString("customerName");
+                int customerId = bundle.getInt("customerId");
+                CUSTOMER_ID = customerId;
                 customer_textView.setVisibility(View.VISIBLE);
                 customer_textView.setText("환영합니다 \n" +customerName + "님");
                 login_button.setText("로그아웃");

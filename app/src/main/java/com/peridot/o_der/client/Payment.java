@@ -8,15 +8,37 @@ import java.io.Serializable;
 public class Payment implements Parcelable {
     String coffeeName;
     int coffeePrice;
+    int count;
+    String hotIce;
 
-    public Payment(String coffeeName, int coffeePrice) {
+    public Payment(String coffeeName, int coffeePrice, int count, String hotIce) {
         this.coffeeName = coffeeName;
         this.coffeePrice = coffeePrice;
+        this.count = count;
+        this.hotIce = hotIce;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getHotIce() {
+        return hotIce;
+    }
+
+    public void setHotIce(String hotIce) {
+        this.hotIce = hotIce;
     }
 
     protected Payment(Parcel in) {
         coffeeName = in.readString();
         coffeePrice = in.readInt();
+        count = in.readInt();
+        hotIce = in.readString();
     }
 
     public static final Creator<Payment> CREATOR = new Creator<Payment>() {
@@ -56,5 +78,7 @@ public class Payment implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(coffeeName);
         dest.writeInt(coffeePrice);
+        dest.writeInt(count);
+        dest.writeString(hotIce);
     }
 }
