@@ -23,6 +23,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import java.text.DecimalFormat;
+
 public class MenuFragment extends Fragment {
     String coffeeName;   // 커피 이름
     int coffeePrice;     // 커피 가격
@@ -43,7 +45,10 @@ public class MenuFragment extends Fragment {
     static int count3;  //총 값
     static String hotIce;//아이스 ,핫 선택
 
+    final DecimalFormat priceFormat = new DecimalFormat("###,###");
 
+    //디저트 핫,아이스 선택 안하기 위해
+    static boolean notDessert;
 
 
 
@@ -63,6 +68,7 @@ public class MenuFragment extends Fragment {
         count3 = Integer.parseInt(Add_btn_text.getText().toString());
         count = 1;
         hotIce = "";
+
 
 
         ImageButton closeBtn = rootView.findViewById(R.id.close_btn);         // 닫기 버튼
@@ -94,9 +100,9 @@ public class MenuFragment extends Fragment {
                 coffee_quan.setText(String.valueOf(count));
 
                 count3 -= count2;
-                String text = String.valueOf(count3)+"원 담기";
-                String texts = "0원 담기";
-                Add_btn_text.setText(text);
+                String price_format = priceFormat.format(count3);
+                String price = price_format+"원 담기";
+                Add_btn_text.setText(price);
 
                 if(count < 1){                                                // 개수가 1 미만일 때
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -108,7 +114,7 @@ public class MenuFragment extends Fragment {
                     count = 0;
                     coffee_quan.setText(String.valueOf(count));
                     //count2 = 0;
-                    Add_btn_text.setText(texts);
+                    Add_btn_text.setText(price);
                 }
             }
         });
@@ -122,8 +128,9 @@ public class MenuFragment extends Fragment {
                 coffee_quan.setText(String.valueOf(count));
 
                 count3 += count2;
-                String text = String.valueOf(count3)+"원 담기";
-                Add_btn_text.setText(text);
+                String price_format = priceFormat.format(count3);
+                String price = price_format+"원 담기";
+                Add_btn_text.setText(price);
 
             }
         });
@@ -137,12 +144,27 @@ public class MenuFragment extends Fragment {
                 LinearLayout fragmentpage = ((MenuPage) MenuPage.context_menu).findViewById(R.id.fragmentPage);
                 orderbutton = ((MenuPage)MenuPage.context_menu).findViewById(R.id.orderbutton);
 
-                // 핫/아이스 버튼 선택하지 않았을 경우
-                if(HotBtn.isChecked() == false && IceBtn.isChecked() == false) {
-                    Toast.makeText(getContext(), "핫/아이스 를 선택하세요", Toast.LENGTH_LONG).show();
-                    Log.d("toast", "라디오버튼 비활성화");
-                }
-                else {
+                // 디저트 외 선택시, 핫/아이스 버튼 선택하지 않았을 경우
+                if(notDessert) {
+                    if (HotBtn.isChecked() == false && IceBtn.isChecked() == false) {
+                        Toast.makeText(getContext(), "핫/아이스 를 선택하세요", Toast.LENGTH_LONG).show();
+                        Log.d("toast", "라디오버튼 비활성화");
+                    }else {
+                        if(count2 > 0) {
+                            fragmentpage.startAnimation(translateDownAnim);
+                            fragmentpage.setVisibility(View.GONE);
+                            orderbutton.setVisibility(View.VISIBLE);
+                            orderbutton.startAnimation(translateUpAnim);
+
+                            coffee_quan.setText(Integer.toString(1));
+                            ordercount+=1;
+                            orderbutton.setText(Integer.toString(ordercount)+"개");
+                        }
+                        else{
+                            Toast.makeText(getContext(), "잘못된 개수입니다", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                } else {
                     if(count2 > 0) {
                         fragmentpage.startAnimation(translateDownAnim);
                         fragmentpage.setVisibility(View.GONE);
@@ -157,6 +179,7 @@ public class MenuFragment extends Fragment {
                         Toast.makeText(getContext(), "잘못된 개수입니다", Toast.LENGTH_LONG).show();
                     }
                 }
+
                 if(HotBtn.isChecked() == true && IceBtn.isChecked() == false){
                     hotIce = "(핫)";
                 }else if(IceBtn.isChecked() == true && HotBtn.isChecked() == false){
@@ -190,19 +213,22 @@ public class MenuFragment extends Fragment {
             count2 = ((MenuPage)MenuPage.context_menu).db_coffeePrice.get(coffee);
             count3 = count2;
             hot_ice_choice.setVisibility(View.VISIBLE);
+            notDessert = true;
         }else if(dessert>-1){
             menuName = ((MenuPage)MenuPage.context_menu).disertAdapter.getItem(dessert).getName();
             count2 = ((MenuPage)MenuPage.context_menu).db_dessertPrice.get(dessert);
             count3 = count2;
             hot_ice_choice.setVisibility(View.INVISIBLE);
-
+            notDessert = false;
         }else if(tea>-1){
             menuName = ((MenuPage)MenuPage.context_menu).teaAdapter.getItem(tea).getName();
             count2 = ((MenuPage)MenuPage.context_menu).db_teaPrice.get(tea);
             count3 = count2;
             hot_ice_choice.setVisibility(View.VISIBLE);
+            notDessert = true;
         }
-        String price_text = count2+"원";
+        String price_format = priceFormat.format(count2);
+        String price_text = price_format+"원"+" 담기";
         Add_btn_text.setText(price_text);
         menu_name.setText(menuName);
     }

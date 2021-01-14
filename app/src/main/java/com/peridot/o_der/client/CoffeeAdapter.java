@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder>
@@ -47,7 +48,7 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
 
         TextView coffeename;
         TextView coffeeprice;
-//        public ImageButton menuplusbutton = itemView.findViewById(R.id.menuplusbutton);
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,8 +60,7 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
             Button orderbutton = ((MenuPage)MenuPage.context_menu).findViewById(R.id.orderbutton);
             Animation translateUpAnim = ((MenuPage)MenuPage.context_menu).translateUpAnim;
             LinearLayout fragmentPage = ((MenuPage)MenuPage.context_menu).findViewById(R.id.fragmentPage);
-            //int coffee_position = ((MenuPage)MenuPage.context_menu).coffee_position;
-            //String coffeeid = ((MenuPage)MenuPage.context_menu).coffeeId;
+
 
             menuplusbutton.setOnClickListener(new View.OnClickListener() {
                 @Override

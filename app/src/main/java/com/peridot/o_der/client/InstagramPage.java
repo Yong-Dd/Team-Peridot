@@ -29,4 +29,10 @@ public class InstagramPage extends AppCompatActivity {
 
         webView.loadUrl(url);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.login_page_slide_in_left,R.anim.login_page_slide_out_right);
+    }
 }

@@ -27,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MenuPage extends AppCompatActivity {
@@ -56,6 +57,10 @@ public class MenuPage extends AppCompatActivity {
     static ArrayList<Integer> db_teaPrice;
 
     String coffeeId;
+
+    //원단위 구별 위해
+    final DecimalFormat priceFormat = new DecimalFormat("###,###");
+
 
 
 
@@ -107,11 +112,19 @@ public class MenuPage extends AppCompatActivity {
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         jsonInnerObject = new JSONObject(jsonArray.get(i).toString());
-                        String coffeeId = jsonInnerObject.getString("COFFEE_ID");
+
+                        //아이디
+                        int coffeeId = jsonInnerObject.getInt("COFFEE_ID");
+
+                        //이름
                         String coffeeName = jsonInnerObject.getString("COFFEE_NAME");
+
+                        //가격, 가격 콤마표시
                         int inDB_coffeePrice = jsonInnerObject.getInt("COFFEE_PRICE");
-                        String coffeePrice = inDB_coffeePrice + "원";
-                        Log.d("coffeeName", coffeeName + "," + coffeeId);
+                        String price = priceFormat.format(inDB_coffeePrice);
+                        String coffeePrice = price + "원";
+
+                        //어뎁터등록
                         coffeeAdapter.addItem(new Coffee(coffeeName, coffeePrice));
 
                         //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
@@ -185,10 +198,19 @@ public class MenuPage extends AppCompatActivity {
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         jsonInnerObject = new JSONObject(jsonArray.get(i).toString());
+
+                        //id
                         int dessertId = jsonInnerObject.getInt("DESSERT_ID");
+
+                        //이름
                         String dessertName = jsonInnerObject.getString("DESSERT_NAME");
+
+                        //가격, 가격콤마표시
                         int inDB_dessertPrice = jsonInnerObject.getInt("DESSERT_PRICE");
-                        String dessertPrice = inDB_dessertPrice + "원";
+                        String price = priceFormat.format(inDB_dessertPrice);
+                        String dessertPrice = price + "원";
+
+                        //어뎁터 등록
                         disertAdapter.addItem(new Disert(dessertName, dessertPrice));
 
                         //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
@@ -245,11 +267,19 @@ public class MenuPage extends AppCompatActivity {
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         jsonInnerObject = new JSONObject(jsonArray.get(i).toString());
+
+                        //id
                         int teaId = jsonInnerObject.getInt("TEA_ID");
+
+                        //이름
                         String teaName = jsonInnerObject.getString("TEA_NAME");
+
+                        //가격, 가격 콤마표시
                         int inDB_teaPrice = jsonInnerObject.getInt("TEA_PRICE");
-                        String teaPrice = inDB_teaPrice + "원";
-                        Log.d("teatea","tea:"+teaName+","+teaPrice);
+                        String price = priceFormat.format(inDB_teaPrice);
+                        String teaPrice = price + "원";
+
+                        //어뎁터 등록
                         teaAdapter.addItem(new Tea(teaName, teaPrice));
 
                         //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
@@ -338,28 +368,26 @@ public class MenuPage extends AppCompatActivity {
      arraylist(paymentList)에 저장, MenuFragment에서 추가 하는 순서대로 paymentList에 추가됨
      MenuFragment에서 넘어온 거라서 그 당시의 position으로 선택을 알 수 있음*/
     public void checkItem(int price, int count, String hotIce){
-        Log.d("paymentList","MenuPage, checkItem called"+price);
 
         //PaymentPage에 전달한 메뉴 이름
         String itemName = "";
-        String dessertHotIce = hotIce;
+
         //여러 메뉴 선택시, 메뉴 중복을 피하기 위해 각 position을 -1로 변경
-        Log.d("positionsss","size: "+coffeeAdapter.getItemCount());
         if(coffee_position>-1){
             itemName = coffeeAdapter.getItem(coffee_position).getName();
             coffee_position = -1;
+
         }else if(dessert_position>-1){
             itemName = disertAdapter.getItem(dessert_position).getName();
             dessert_position = -1;
-            dessertHotIce = "";
+
         }else if(tea_position>-1){
             itemName = teaAdapter.getItem(tea_position).getName();
             tea_position = -1;
         }
 
         if(!itemName.equals("")){
-            Log.d("paymentList","checkItem add, itemName: "+itemName);
-            paymentList.add(new Payment(itemName, price,count,dessertHotIce));
+            paymentList.add(new Payment(itemName, price,count,hotIce));
         }
     }
     public void close(){

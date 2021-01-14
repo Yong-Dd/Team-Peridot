@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHolder> {
@@ -48,20 +49,25 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-
+        final DecimalFormat priceFormat = new DecimalFormat("###,###");
         TextView payment_coffeeName;
+        TextView payment_coffeeCount;
         TextView payment_coffeePrice;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             payment_coffeeName = itemView.findViewById(R.id.payment_coffeeName);
+            payment_coffeeCount = itemView.findViewById(R.id.payment_coffeeCount);
             payment_coffeePrice = itemView.findViewById(R.id.payment_coffeePrice);
         }
 
         public void setItem(Payment item){
             payment_coffeeName.setText(item.getCoffeeName()+item.getHotIce());
-            payment_coffeePrice.setText(item.getCount()+"개     "+item.getCoffeePrice()+"원");
+            payment_coffeeCount.setText(item.getCount()+"개");
+
+            String price = priceFormat.format(item.getCoffeePrice());
+            payment_coffeePrice.setText(price+"원");
         }
     }
 }

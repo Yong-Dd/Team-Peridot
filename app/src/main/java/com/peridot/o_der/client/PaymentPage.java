@@ -30,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +53,8 @@ public class PaymentPage extends AppCompatActivity {
     ArrayList<Payment> paymentList;
 
     static String pick_time;
+
+    final DecimalFormat priceFormat = new DecimalFormat("###,###");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +117,7 @@ public class PaymentPage extends AppCompatActivity {
 
                 //주문일자
                 Date today = new Date();
-                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd  HH시 mm분");
                 String ORDER_DATE = format1.format(today);
 
                 String ORDER_MENU="";
@@ -198,7 +201,8 @@ public class PaymentPage extends AppCompatActivity {
                 int total_price = choice_price - discount_price;
 
                 //결제하기 버튼에 가격 추가
-                String payment_price = total_price+"원 결제하기";
+                String paymentFormat = priceFormat.format(total_price);
+                String payment_price = paymentFormat+"원 결제하기";
                 if(choice_price!=0){
                     payment_button.setText(payment_price);
                 }
@@ -214,9 +218,11 @@ public class PaymentPage extends AppCompatActivity {
         time_picker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTime();
+                TimePickerDialog dialog = new TimePickerDialog(PaymentPage.this, android.R.style.Theme_Holo_Light_Dialog,listener, 15, 24, false);
+                dialog.show();
             }
         });
+
 
 
 
@@ -244,18 +250,14 @@ public class PaymentPage extends AppCompatActivity {
         return choice;
     }
     //timePicker dialog
-    public void showTime() {
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                pick_time = hourOfDay + "시 " + minute + "분";
-                time_pick_Text.setText(pick_time );
 
-            }
-        }, 21, 12, true);
+    private TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            pick_time = hourOfDay + "시 " + minute + "분";
+            time_pick_Text.setText(pick_time );
+        }
+    };
 
-        timePickerDialog.setMessage("시간 설정");
-        timePickerDialog.show();
-    }
 
 }
