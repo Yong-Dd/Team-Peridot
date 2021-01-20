@@ -13,10 +13,10 @@ public class OrderListUploadRequest extends StringRequest {
     private Map<String, String> parameters;
 
 
-    public OrderListUploadRequest(int CUSTOMER_ID, String ORDER_DATE, String ORDER_MENU, int ORDER_PRICE, String PICKUP_TIME, String ORDER_MEMO, Response.Listener<String> listener) {
+    public OrderListUploadRequest(String CUSTOMER_NAME, String ORDER_DATE, String ORDER_MENU, int ORDER_PRICE, String PICKUP_TIME, String ORDER_MEMO, Response.Listener<String> listener) {
         super(Method.POST, URL, listener, null);
         parameters = new HashMap<>();
-        parameters.put("CUSTOMER_ID",Integer.toString(CUSTOMER_ID));
+        parameters.put("CUSTOMER_NAME",CUSTOMER_NAME);
         parameters.put("ORDER_DATE",ORDER_DATE);
         parameters.put("ORDER_MENU",ORDER_MENU);
         parameters.put("ORDER_PRICE", Integer.toString(ORDER_PRICE));

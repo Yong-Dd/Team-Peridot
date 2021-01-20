@@ -113,7 +113,7 @@ public class PaymentPage extends AppCompatActivity {
             public void onClick(View v) {
                 //로그인시 customer id 받아오기 (미로그인시 id = 0)
                 MainActivity mainActivity = new MainActivity();
-                int CUSTOMER_ID = mainActivity.CUSTOMER_ID;
+                String CUSTOMER_NAME = mainActivity.CUSTOMER_NAME;
 
                 //주문일자
                 Date today = new Date();
@@ -160,7 +160,8 @@ public class PaymentPage extends AppCompatActivity {
 
                     }
                 };
-                OrderListUploadRequest orderListUploadRequest = new OrderListUploadRequest(CUSTOMER_ID,
+
+                OrderListUploadRequest orderListUploadRequest = new OrderListUploadRequest(CUSTOMER_NAME,
                         ORDER_DATE, ORDER_MENU, ORDER_PRICE, PICKUP_TIME, ORDER_MEMO, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(PaymentPage.this);
                 queue.add(orderListUploadRequest);
@@ -198,10 +199,10 @@ public class PaymentPage extends AppCompatActivity {
 
                 //쿠폰 할인 가격, 총 가격 계산
                 int discount_price = (int) Math.floor(choice_price * choice_coupon);
-                int total_price = choice_price - discount_price;
+                choice_price = choice_price - discount_price;
 
                 //결제하기 버튼에 가격 추가
-                String paymentFormat = priceFormat.format(total_price);
+                String paymentFormat = priceFormat.format(choice_price);
                 String payment_price = paymentFormat+"원 결제하기";
                 if(choice_price!=0){
                     payment_button.setText(payment_price);

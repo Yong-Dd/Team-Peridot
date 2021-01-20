@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     static boolean login;
 
     static int CUSTOMER_ID;
+    static String CUSTOMER_NAME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         context_main = this;
 
-        imageView = findViewById(R.id.imageView2);
+        imageView = findViewById(R.id.menuImage);
         Drawable alpha1 = imageView.getBackground();
         alpha1.setAlpha(100);
 
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 String customerName = bundle.getString("customerName");
                 int customerId = bundle.getInt("customerId");
                 CUSTOMER_ID = customerId;
+                CUSTOMER_NAME = customerName;
                 customer_textView.setVisibility(View.VISIBLE);
                 customer_textView.setText("환영합니다 \n" +customerName + "님");
                 login_button.setText("로그아웃");

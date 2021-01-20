@@ -5,10 +5,20 @@ package com.peridot.o_der.client;
 public class Tea {
     String name;
     String price;
+    String imgPath;
 
-    public Tea(String name, String price) {
+    public Tea(String name, String price, String imgPath) {
         this.name = name;
         this.price = price;
+        this.imgPath = imgPath;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 
     public String getName() {

@@ -6,16 +6,21 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.ViewHolder> {
     ArrayList<Tea> items = new ArrayList<Tea>();
+
+    static View view;
 
     @NonNull
     @Override
@@ -41,17 +46,23 @@ public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.ViewHolder> {
         static MenuFragment menuFragment = new MenuFragment();
         TextView teaname;
         TextView teaprice;
+        ImageView teaImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             teaname = itemView.findViewById(R.id.teaname);
             teaprice = itemView.findViewById(R.id.teaprice);
+            teaImage = itemView.findViewById(R.id.menuImage);
+
             ImageButton menuplusbutton = itemView.findViewById(R.id.menuplusbutton);
 
             Button orderbutton = ((MenuPage)MenuPage.context_menu).findViewById(R.id.orderbutton);
             Animation translateUpAnim = ((MenuPage)MenuPage.context_menu).translateUpAnim;
             LinearLayout fragmentPage = ((MenuPage)MenuPage.context_menu).findViewById(R.id.fragmentPage);
+
+            view = itemView;
+
             menuplusbutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -70,6 +81,8 @@ public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.ViewHolder> {
         public void setItem(Tea item) {
             teaname.setText(item.getName());
             teaprice.setText(item.getPrice());
+
+            Glide.with(view).load("http://teamperidot.dothome.co.kr/"+item.getImgPath()).into(teaImage);
         }
     }
     public void addItem(Tea item) {

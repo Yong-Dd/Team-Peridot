@@ -3,6 +3,7 @@ package com.peridot.o_der.client;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -22,6 +24,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
 
@@ -40,6 +44,8 @@ public class MenuFragment extends Fragment {
     RadioButton IceBtn;
     Button orderbutton;
 
+    static ImageView menuImage; //이미지
+
     int count; //개수
     static int count2;  //메뉴 가격
     static int count3;  //총 값
@@ -50,7 +56,7 @@ public class MenuFragment extends Fragment {
     //디저트 핫,아이스 선택 안하기 위해
     static boolean notDessert;
 
-
+    static View view;
 
     @Nullable
     @Override
@@ -64,11 +70,14 @@ public class MenuFragment extends Fragment {
         HotBtn = rootView.findViewById(R.id.Hot_btn);
         IceBtn = rootView.findViewById(R.id.Ice_btn);
         menu_name = rootView.findViewById(R.id.coffee_name);
+        menuImage = rootView.findViewById(R.id.coffee_image);
         count2 = Integer.parseInt(Add_btn_text.getText().toString());
         count3 = Integer.parseInt(Add_btn_text.getText().toString());
         count = 1;
         hotIce = "";
 
+
+        view = rootView;
 
 
         ImageButton closeBtn = rootView.findViewById(R.id.close_btn);         // 닫기 버튼
@@ -208,24 +217,75 @@ public class MenuFragment extends Fragment {
 
         String menuName = "";
 
+        final String mainUrl = "http://teamperidot.dothome.co.kr/";
+
         if(coffee>-1){
+            //메뉴 이름 설정
             menuName = ((MenuPage)MenuPage.context_menu).coffeeAdapter.getItem(coffee).getName();
-            count2 = ((MenuPage)MenuPage.context_menu).db_coffeePrice.get(coffee);
+
+            //가격 설정
+//            count2 = ((MenuPage)MenuPage.context_menu).db_coffeePrice.get(coffee);
+            count2 = ((MenuPage)MenuPage.context_menu).db_coffee.get(coffee).getPrice();
             count3 = count2;
+
+            //핫아이스 선택 설정
             hot_ice_choice.setVisibility(View.VISIBLE);
             notDessert = true;
+
+            //이미지 설정
+            String image = ((MenuPage)MenuPage.context_menu).db_coffee.get(coffee).getImagePath();
+            String url = mainUrl + image;
+            Log.d("image","image 가져오기 "+image);
+            if (!image.equals("null")) {
+                Glide.with(view).load(url).into(menuImage);
+            }else{
+                menuImage.setImageResource(R.drawable.coffee);
+            }
+
         }else if(dessert>-1){
+            //메뉴 이름 설정
             menuName = ((MenuPage)MenuPage.context_menu).disertAdapter.getItem(dessert).getName();
-            count2 = ((MenuPage)MenuPage.context_menu).db_dessertPrice.get(dessert);
+
+            //가격 설정
+//            count2 = ((MenuPage)MenuPage.context_menu).db_dessertPrice.get(dessert);
+            count2 = ((MenuPage)MenuPage.context_menu).db_dessert.get(dessert).getPrice();
             count3 = count2;
+
+            //핫아이스 선택 설정
             hot_ice_choice.setVisibility(View.INVISIBLE);
             notDessert = false;
+
+            //이미지 설정
+            String image = ((MenuPage)MenuPage.context_menu).db_dessert.get(dessert).getImagePath();
+            String url = mainUrl + image;
+            Log.d("image","image 가져오기 "+image);
+            if (!image.equals("null")) {
+                Glide.with(view).load(url).into(menuImage);
+            }else{
+                menuImage.setImageResource(R.drawable.coffee);
+            }
         }else if(tea>-1){
+            //메뉴 이름 설정
             menuName = ((MenuPage)MenuPage.context_menu).teaAdapter.getItem(tea).getName();
-            count2 = ((MenuPage)MenuPage.context_menu).db_teaPrice.get(tea);
+
+            //가격 설정
+//            count2 = ((MenuPage)MenuPage.context_menu).db_teaPrice.get(tea);
+            count2 = ((MenuPage)MenuPage.context_menu).db_tea.get(tea).getPrice();
             count3 = count2;
+
+            //핫아이스 선택 설정
             hot_ice_choice.setVisibility(View.VISIBLE);
             notDessert = true;
+
+            //이미지 설정
+            String image = ((MenuPage)MenuPage.context_menu).db_tea.get(tea).getImagePath();
+            String url = mainUrl + image;
+            Log.d("image","image 가져오기 "+image);
+            if (!image.equals("null")) {
+                Glide.with(view).load(url).into(menuImage);
+            }else{
+                menuImage.setImageResource(R.drawable.coffee);
+            }
         }
         String price_format = priceFormat.format(count2);
         String price_text = price_format+"원"+" 담기";

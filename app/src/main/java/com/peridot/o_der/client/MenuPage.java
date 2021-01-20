@@ -52,9 +52,14 @@ public class MenuPage extends AppCompatActivity {
     static TeaAdapter teaAdapter;
 
     //MenuFragment 전달 위함
-    static ArrayList<Integer> db_coffeePrice;
-    static ArrayList<Integer> db_dessertPrice;
-    static ArrayList<Integer> db_teaPrice;
+//    static ArrayList<Integer> db_coffeePrice;
+//    static ArrayList<Integer> db_dessertPrice;
+//    static ArrayList<Integer> db_teaPrice;
+
+    // 임시
+    static ArrayList<Menu> db_coffee;
+    static ArrayList<Menu> db_dessert;
+    static ArrayList<Menu> db_tea;
 
     String coffeeId;
 
@@ -75,9 +80,13 @@ public class MenuPage extends AppCompatActivity {
         dessert_position = -1;
         tea_position = -1;
 
-        db_coffeePrice = new ArrayList<>();
-        db_dessertPrice = new ArrayList<>();
-        db_teaPrice = new ArrayList<>();
+//        db_coffeePrice = new ArrayList<>();
+//        db_dessertPrice = new ArrayList<>();
+//        db_teaPrice = new ArrayList<>();
+
+        db_coffee = new ArrayList<>();
+        db_dessert = new ArrayList<>();
+        db_tea = new ArrayList<>();
         //****여기까지
 
         context_menu = this; //다른 액티비티에서 MenuPage 변수를 사용할 수 있음
@@ -124,12 +133,15 @@ public class MenuPage extends AppCompatActivity {
                         String price = priceFormat.format(inDB_coffeePrice);
                         String coffeePrice = price + "원";
 
+                        //이미지
+                        String coffeeImage = jsonInnerObject.getString("COFFEE_IMG");
+
                         //어뎁터등록
-                        coffeeAdapter.addItem(new Coffee(coffeeName, coffeePrice));
+                        coffeeAdapter.addItem(new Coffee(coffeeName, coffeePrice,coffeeImage));
 
                         //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
-                        db_coffeePrice.add(i,inDB_coffeePrice);
-
+//                        db_coffeePrice.add(i,inDB_coffeePrice);
+                        db_coffee.add(i,new Menu(coffeeName,inDB_coffeePrice,coffeeImage));
                     }
                     coffeerecyclerView.setAdapter(coffeeAdapter);
                 } catch (JSONException e) {
@@ -210,12 +222,15 @@ public class MenuPage extends AppCompatActivity {
                         String price = priceFormat.format(inDB_dessertPrice);
                         String dessertPrice = price + "원";
 
+                        //이미지
+                        String dessertImage = jsonInnerObject.getString("DESSERT_IMG");
+
                         //어뎁터 등록
-                        disertAdapter.addItem(new Disert(dessertName, dessertPrice));
+                        disertAdapter.addItem(new Disert(dessertName, dessertPrice, dessertImage));
 
                         //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
-                        db_dessertPrice.add(i,inDB_dessertPrice);
-
+//                        db_dessertPrice.add(i,inDB_dessertPrice);
+                        db_dessert.add(i,new Menu(dessertName,inDB_dessertPrice,dessertImage));
                     }
                     disertrecyclerView.setAdapter(disertAdapter);
                 } catch (JSONException e) {
@@ -279,12 +294,15 @@ public class MenuPage extends AppCompatActivity {
                         String price = priceFormat.format(inDB_teaPrice);
                         String teaPrice = price + "원";
 
+                        //이미지
+                        String teaImage = jsonInnerObject.getString("TEA_IMG");
+
                         //어뎁터 등록
-                        teaAdapter.addItem(new Tea(teaName, teaPrice));
+                        teaAdapter.addItem(new Tea(teaName, teaPrice,teaImage));
 
                         //MenuFragment 전달 위함(리싸이클러뷰의 position과 i가 일치하게 됨)
-                        db_teaPrice.add(i,inDB_teaPrice);
-
+//                        db_teaPrice.add(i,inDB_teaPrice);
+                        db_tea.add(i,new Menu(teaName,inDB_teaPrice,teaImage));
                     }
                     tearecyclerView.setAdapter(teaAdapter);
                 } catch (JSONException e) {

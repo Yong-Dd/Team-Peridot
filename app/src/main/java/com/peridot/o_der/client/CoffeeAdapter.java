@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -21,6 +24,8 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
  {
     ArrayList<Coffee> items = new ArrayList<Coffee>();
     static MenuFragment menuFragment = new MenuFragment();
+
+    static View view;
 
     @NonNull
     @Override
@@ -48,19 +53,22 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
 
         TextView coffeename;
         TextView coffeeprice;
-
+        ImageView coffeeImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             coffeename = itemView.findViewById(R.id.coffeename);
             coffeeprice = itemView.findViewById(R.id.coffeeprice);
+            coffeeImage = itemView.findViewById(R.id.menuImage);
+
             ImageButton menuplusbutton = itemView.findViewById(R.id.menuplusbutton);
 
             Button orderbutton = ((MenuPage)MenuPage.context_menu).findViewById(R.id.orderbutton);
             Animation translateUpAnim = ((MenuPage)MenuPage.context_menu).translateUpAnim;
             LinearLayout fragmentPage = ((MenuPage)MenuPage.context_menu).findViewById(R.id.fragmentPage);
 
+            view = itemView;
 
             menuplusbutton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,6 +91,7 @@ public class CoffeeAdapter extends RecyclerView.Adapter<CoffeeAdapter.ViewHolder
         public void setItem(Coffee item) {
             coffeename.setText(item.getName());
             coffeeprice.setText(item.getPrice());
+            Glide.with(view).load("http://teamperidot.dothome.co.kr/"+item.getImgPath()).into(coffeeImage);
         }
 
      }//View에 내용 추가
