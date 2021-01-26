@@ -120,10 +120,14 @@ public class MenuFragment extends Fragment {
                     builder.setNegativeButton("돌아가기", null);
                     builder.create().show();
 
-                    count = 0;
+                    count = 1;
                     coffee_quan.setText(String.valueOf(count));
                     //count2 = 0;
-                    Add_btn_text.setText(price);
+                    count3 = count2;
+
+                    String price_format2 = priceFormat.format(count2);
+                    String price2 = price_format2+"원 담기";
+                    Add_btn_text.setText(price2);
                 }
             }
         });

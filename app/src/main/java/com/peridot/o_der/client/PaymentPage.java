@@ -23,19 +23,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PaymentPage extends AppCompatActivity {
+
+    static RequestQueue requestQueue;
+    static String regId = "cAqF9C0vvwQ:APA91bFq-ZgD4-qbz7OpBXU7q3fE0n8r5XnUk247Z4dk8l7zY_pH6bOT2H3ufqXkaZhsjwodjP6mHQ3dy8oQy0eekYeueiS1HSwt9tMotNuhZcofqHauhNVG4Jrn5j2grURmnHq4PHCC";
 
     //coupon 종류
     String[] coupons = {"선택 안함", "첫 가입 축하 쿠폰 - 20%","생일 기념 쿠폰 - 10%", "오늘의 메뉴 할인 - 5%"};
@@ -115,6 +125,10 @@ public class PaymentPage extends AppCompatActivity {
                 MainActivity mainActivity = new MainActivity();
                 String CUSTOMER_NAME = mainActivity.CUSTOMER_NAME;
 
+                if(CUSTOMER_NAME == null){
+                    CUSTOMER_NAME = "비회원";
+                }
+
                 //주문일자
                 Date today = new Date();
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd  HH시 mm분");
@@ -129,6 +143,11 @@ public class PaymentPage extends AppCompatActivity {
                 //주문 메모 받아오기
                 String ORDER_MEMO = memo_editText.getText().toString();
 
+                Button time_picker = findViewById(R.id.time_picker);
+                String time_pick_up_text = time_picker.getText().toString();
+
+                String message = "order";
+
                 //db에 넘길 자료 준비
                 if(paymentList!=null){
                     for(int i =0; i<paymentList.size(); i++){
@@ -136,18 +155,28 @@ public class PaymentPage extends AppCompatActivity {
                         int count = paymentList.get(i).count;
                         String hotIce = paymentList.get(i).hotIce;
                         String orderMenu = coffeeName+hotIce+count+"개";
-                     ORDER_MENU += orderMenu+"\n";
-
-                        Toast.makeText(getApplicationContext(),"결제가 완료되었습니다",Toast.LENGTH_SHORT).show();
-                        //메인(홈)으로 돌아감
-                        ((MenuPage)MenuPage.context_menu).close();
-                        finish();
-
+                        ORDER_MENU += orderMenu+"\n";
 
                     }
                     }else{
-                        Toast.makeText(getApplicationContext(),"메뉴를 선택해주세요",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"메뉴를 선택해주세요",Toast.LENGTH_SHORT).show();
                     }
+
+                if(time_pick_up_text.length() <= 5) {  
+                    Toast.makeText(getApplicationContext(),"시간을 선택해주세요",Toast.LENGTH_SHORT).show();
+                }
+
+                if(paymentList!=null && time_pick_up_text.length() > 5){
+                    Toast.makeText(getApplicationContext(),"결제가 완료되었습니다",Toast.LENGTH_SHORT).show();
+                    //메인(홈)으로 돌아감
+                    ((MenuPage)MenuPage.context_menu).close();
+                    finish();
+
+                    // ServerMain으로 메시지 송신
+                    sendMessage(message);
+
+                }
+
                 //response listener
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
@@ -165,9 +194,9 @@ public class PaymentPage extends AppCompatActivity {
                         ORDER_DATE, ORDER_MENU, ORDER_PRICE, PICKUP_TIME, ORDER_MEMO, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(PaymentPage.this);
                 queue.add(orderListUploadRequest);
+
+
                 }
-
-
 
 
         });
@@ -224,7 +253,9 @@ public class PaymentPage extends AppCompatActivity {
             }
         });
 
-
+        if(requestQueue == null) {
+            requestQueue = Volley.newRequestQueue(getApplicationContext());
+        }
 
 
     }
@@ -256,9 +287,68 @@ public class PaymentPage extends AppCompatActivity {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             pick_time = hourOfDay + "시 " + minute + "분";
-            time_pick_Text.setText(pick_time );
+            time_pick_Text.setText(pick_time);
         }
     };
 
+    public void sendMessage(String message) {
+        JSONObject requestData = new JSONObject();
+
+        try {
+            requestData.put("priority", "high");
+
+            JSONObject dataObj = new JSONObject();
+            dataObj.put("contents", message);
+            requestData.put("data", dataObj);
+
+            JSONArray idArray = new JSONArray();
+            idArray.put(0, regId);
+            requestData.put("registration_ids", idArray);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                "https://fcm.googleapis.com/fcm/send",
+                requestData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "key=AAAAjN4Kt-M:APA91bFf4hkKeX2OTn-nNG2NXWkxMnGkQZvL4w38OBArEYAQach4z_m1nZc9DjGwY4xXW5VZCrF6rnbAmLTLl_s8_PNXkekikIxRtfbTy4JFiusPSoGNtcMBueJqpJkLK7NxV9748Vxb");
+
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+                return params;
+            }
+        };
+
+        request.setShouldCache(false);
+        requestQueue.add(request);
+    }
 
 }

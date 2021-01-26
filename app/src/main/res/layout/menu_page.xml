@@ -78,10 +78,28 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:paddingTop="10dp"
+                android:text="Coffee"
+                android:textColor="#80695653"
+                android:textSize="37sp"
+                android:textStyle="bold" />
+
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="0dp"
                 android:background="#ECCBAE"
                 app:cardBackgroundColor="#00FFFFFF"
                 app:cardCornerRadius="10dp"
@@ -97,14 +115,31 @@
                         android:layout_height="wrap_content"
                         android:background="#F3E9DA"
                         android:overScrollMode="never" />
+
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="0dp"
+                android:text="Dessert"
+                android:textColor="#80695653"
+                android:textSize="37sp"
+                android:textStyle="bold" />
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="#F3E9DA"
                 app:cardBackgroundColor="#F3E9DA"
                 app:cardCornerRadius="10dp"
@@ -122,16 +157,26 @@
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="0dp"
+                android:text="Tea"
+                android:textColor="#80695653"
+                android:textSize="37sp"
+                android:textStyle="bold" />
+
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="20dp"
                 android:background="#F3E9DA"
                 app:cardBackgroundColor="#F3E9DA"
                 app:cardCornerRadius="10dp"
