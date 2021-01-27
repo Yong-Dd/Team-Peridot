@@ -40,7 +40,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class PaymentPage extends AppCompatActivity {
 
@@ -124,14 +126,21 @@ public class PaymentPage extends AppCompatActivity {
                 //로그인시 customer id 받아오기 (미로그인시 id = 0)
                 MainActivity mainActivity = new MainActivity();
                 String CUSTOMER_NAME = mainActivity.CUSTOMER_NAME;
+                String TEL = mainActivity.TEL;
 
                 if(CUSTOMER_NAME == null){
                     CUSTOMER_NAME = "비회원";
                 }
 
+                if(TEL == null){
+                    TEL = "";
+                }
+
                 //주문일자
                 Date today = new Date();
+                TimeZone tz1 = TimeZone.getTimeZone("Asia/Seoul");
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd  HH시 mm분");
+                format1.setTimeZone(tz1);
                 String ORDER_DATE = format1.format(today);
 
                 String ORDER_MENU="";
@@ -190,7 +199,7 @@ public class PaymentPage extends AppCompatActivity {
                     }
                 };
 
-                OrderListUploadRequest orderListUploadRequest = new OrderListUploadRequest(CUSTOMER_NAME,
+                OrderListUploadRequest orderListUploadRequest = new OrderListUploadRequest(CUSTOMER_NAME,TEL,
                         ORDER_DATE, ORDER_MENU, ORDER_PRICE, PICKUP_TIME, ORDER_MEMO, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(PaymentPage.this);
                 queue.add(orderListUploadRequest);
@@ -248,7 +257,22 @@ public class PaymentPage extends AppCompatActivity {
         time_picker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerDialog dialog = new TimePickerDialog(PaymentPage.this, android.R.style.Theme_Holo_Light_Dialog,listener, 15, 24, false);
+                //현재 시간 가져오기
+                Date now = new Date();
+                //한국 타임존 설정
+                TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
+
+                //시간
+                SimpleDateFormat hourFormat = new SimpleDateFormat("HH", Locale.KOREA);
+                hourFormat.setTimeZone(tz);
+                String hour = hourFormat.format(now);
+
+                //분
+                SimpleDateFormat minuteFormat = new SimpleDateFormat("mm",Locale.KOREA);
+                String minute = minuteFormat.format(now);
+
+                //타임피커 설정
+                TimePickerDialog dialog = new TimePickerDialog(PaymentPage.this, android.R.style.Theme_Holo_Light_Dialog,listener, Integer.valueOf(hour), Integer.valueOf(minute), false);
                 dialog.show();
             }
         });

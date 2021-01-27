@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     static int CUSTOMER_ID;
     static String CUSTOMER_NAME;
+    static String TEL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
             if(bundle !=null){
                 String customerName = bundle.getString("customerName");
                 int customerId = bundle.getInt("customerId");
+                String tel = bundle.getString("tel");
+                TEL = tel;
                 CUSTOMER_ID = customerId;
                 CUSTOMER_NAME = customerName;
                 customer_textView.setVisibility(View.VISIBLE);
