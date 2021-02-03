@@ -2,10 +2,7 @@ package com.peridot.o_der.client;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +15,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -138,9 +134,7 @@ public class PaymentPage extends AppCompatActivity {
 
                 //주문일자
                 Date today = new Date();
-                TimeZone tz1 = TimeZone.getTimeZone("Asia/Seoul");
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd  HH시 mm분");
-                format1.setTimeZone(tz1);
                 String ORDER_DATE = format1.format(today);
 
                 String ORDER_MENU="";
@@ -203,8 +197,6 @@ public class PaymentPage extends AppCompatActivity {
                         ORDER_DATE, ORDER_MENU, ORDER_PRICE, PICKUP_TIME, ORDER_MEMO, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(PaymentPage.this);
                 queue.add(orderListUploadRequest);
-
-
                 }
 
 
@@ -281,6 +273,14 @@ public class PaymentPage extends AppCompatActivity {
             requestQueue = Volley.newRequestQueue(getApplicationContext());
         }
 
+        Button coffee_shop_search_Btn = findViewById(R.id.coffee_shop_search_Btn);
+        coffee_shop_search_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CafeLocation.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
